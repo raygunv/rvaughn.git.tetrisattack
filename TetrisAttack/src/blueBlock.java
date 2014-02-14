@@ -10,8 +10,14 @@ public class blueBlock extends Block {
 	public blueBlock(int x, int y) {
 		super(x,y);
 		setBackground(Color.BLUE);
-		
-
 	}
-
+	
+	public boolean match(BlockType color)
+	{
+		return color==BlockType.BLUE;
+	}
+	public boolean match(Block otherBlock)
+	{
+		return otherBlock.match(BlockType.BLUE);
+	}
 }
