@@ -5,7 +5,8 @@ import javax.swing.JPanel;
 public class blockHolder {
 
 	Random rn = new Random();
-
+	int yMatchCounter=0;
+	int xMatchCounter=0;
 
 	Block arrayOfBlocks[][] = new Block[6][12];
 
@@ -85,44 +86,71 @@ public class blockHolder {
 */
 private boolean isolateBlock(int i, int j,  int random) {
 		
-		if(arrayOfBlocks[i-1][j]==null)
-		{
-			if(arrayOfBlocks[i+1][j]==null)
-			{
-				if(arrayOfBlocks[i][j-1]==null)
-				{
-					if(arrayOfBlocks[i][j++]==null)
-					{
-						return false;
-					}
-					else if(arrayOfBlocks[i][j].match(arrayOfBlocks[i][j++]))
-					{
-						j++;
-						isolateBlock(i, j, random);
-					}
-				}
-				else if(arrayOfBlocks[i][j].match(arrayOfBlocks[i][j-1]))
-				{
-					j--;
-					isolateBlock(i, j, random);
-				}
-			}
-			else if(arrayOfBlocks[i][j].match(arrayOfBlocks[i+1][j]))
-			{
-				i++;
-				isolateBlock(i, j, random);
-			}
-		}
-		else if(arrayOfBlocks[i][j].match(arrayOfBlocks[i-1][j]))
-		{
-			i--;
-			isolateBlock(i, j, random);
-		}
 		
-			
+		
+	}
+public boolean matchUp(int i, int j,  int random)
+{
+	if(arrayOfBlocks[i][j++]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i][j++]))
+	{
+		return false;
+	}
+	else 
+	{
+		j++;
+		yMatchCounter++;
+		matchUp(i, j, random);
 		return true;
 	}
-	public void paneFiller(JPanel pane) {
+	
+}
+public boolean matchDown(int i, int j, int random)
+{
+	if(arrayOfBlocks[i][j-1]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i][j-1]))
+	{
+		return false;
+	}
+	else 
+	{
+		j--;
+		yMatchCounter++;
+		matchDown(i, j, random);
+		return true;
+	}
+	
+}
+public boolean matchLeft(int i, int j,  int random)
+{
+	assert(i!=0);
+	if(arrayOfBlocks[i--][j]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i--][j]))
+	{
+		
+	}
+	else 
+	{
+		i--;
+		xMatchCounter++;
+		matchLeft(i, j, random);
+		return true;
+	}
+	
+}
+public boolean matchRight(int i, int j,  int random)
+{
+	if(arrayOfBlocks[i++][j]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i++][j]))
+	{
+		return false;
+	}
+	else 
+	{
+		i++;
+		xMatchCounter++;
+		matchRight(i, j, random);
+		return true;
+	}
+	
+}
+public void paneFiller(JPanel pane) {
 		int x = 0;
 		int y = 0;
 		for (int i = 0; i < 6; i++) {
