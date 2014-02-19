@@ -15,10 +15,10 @@ public class blockHolder {
 		final int COLUMNS = 6;
 
 		BlockType color;
+		Block newBlock;
 		int random;
 
 		int startRow = ROWS/2;
-		
 		for (int i = 0; i < COLUMNS; i++) {
 
 			for (int j = startRow; j < ROWS; j++) {
@@ -33,32 +33,32 @@ public class blockHolder {
 				color = BlockType.values()[random];
 				switch (color) {
 					case RED:
-						redBlock red = new redBlock(i, j);
-						arrayOfBlocks[i][j] = red;
+						newBlock = new redBlock(i, j);
+						arrayOfBlocks[i][j] = newBlock;
 						break;
 
 					case BLUE:
-						blueBlock blue = new blueBlock(i, j);
-						arrayOfBlocks[i][j] = blue;
+						newBlock = new blueBlock(i, j);
+						arrayOfBlocks[i][j] = newBlock;
 						break;
 
 					case CYAN:
-						cyanBlock cyan = new cyanBlock(i, j);
-						arrayOfBlocks[i][j] = cyan;
+						newBlock = new cyanBlock(i, j);
+						arrayOfBlocks[i][j] = newBlock;
 						break;
 					case PURPLE:
-						purpleBlock purple = new purpleBlock(i, j);
-						arrayOfBlocks[i][j] = purple;
+						newBlock = new purpleBlock(i, j);
+						arrayOfBlocks[i][j] = newBlock;
 						break;
 
 					case YELLOW:
-						yellowBlock yellow = new yellowBlock(i, j);
-						arrayOfBlocks[i][j] = yellow;
+						newBlock = new yellowBlock(i, j);
+						arrayOfBlocks[i][j] = newBlock;
 						break;
 
 					case GREEN:
-						greenBlock green = new greenBlock(i, j);
-						arrayOfBlocks[i][j] = green;
+						newBlock = new greenBlock(i, j);
+						arrayOfBlocks[i][j] = newBlock;
 						break;
 						
 					default:
