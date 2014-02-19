@@ -5,8 +5,8 @@ import javax.swing.JPanel;
 public class blockHolder {
 
 	Random rn = new Random();
-	int yMatchCounter=0;
-	int xMatchCounter=0;
+	int yMatchCounter=1;
+	int xMatchCounter=1;
 
 	Block arrayOfBlocks[][] = new Block[6][12];
 
@@ -85,6 +85,28 @@ public class blockHolder {
 	}
 */
 private boolean isolateBlock(int i, int j,  int random) {
+	xMatchCounter=1;
+	yMatchCounter=1;
+	if(i!=0)
+	{
+		if(matchLeft(i, j, random))
+		{
+			return false;
+		}
+	}
+	//if(i!=5)
+	//{
+	//	matchRight(i, j, random);
+	//}
+	//if(j!=0)
+	//{
+	//	matchUp(i, j, random);
+	//}
+	//if(j!=11)
+	//{
+	//	matchDown(i, j, random);
+	//}
+	return true;
 		
 		
 		
@@ -124,15 +146,20 @@ public boolean matchLeft(int i, int j,  int random)
 	assert(i!=0);
 	if(arrayOfBlocks[i--][j]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i--][j]))
 	{
-		
+		return false;
 	}
 	else 
 	{
 		i--;
 		xMatchCounter++;
-		matchLeft(i, j, random);
-		return true;
+		if(xMatchCounter==3)
+		{
+			return true;
+		}
+		
+		return matchLeft(i, j, random);
 	}
+	
 	
 }
 public boolean matchRight(int i, int j,  int random)
