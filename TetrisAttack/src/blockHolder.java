@@ -7,12 +7,13 @@ public class blockHolder {
 	Random rn = new Random();
 	int yMatchCounter=1;
 	int xMatchCounter=1;
+	final int ROWS = 12;
+	final int COLUMNS = 6;
 
 	Block arrayOfBlocks[][] = new Block[6][12];
 
 	public void arrayFiller() {
-		final int ROWS = 12;
-		final int COLUMNS = 6;
+		
 
 		BlockType color;
 		Block newBlock;
@@ -28,7 +29,7 @@ public class blockHolder {
 
 				do {
 					random = rn.nextInt(6);
-				} while (!isolateBlock(i, j, random));
+				} while (!isolateBlock(i, j, BlockType.values()[random]));
 				
 				color = BlockType.values()[random];
 				switch (color) {
@@ -84,51 +85,45 @@ public class blockHolder {
 		return true;
 	}
 */
-private boolean isolateBlock(int i, int j,  int random) {
+private boolean isolateBlock(int i, int j,  BlockType color) {
 	xMatchCounter=1;
 	yMatchCounter=1;
 	if(i!=0)
 	{
-		if(matchLeft(i, j, random))
+		if(matchLeft(i, j, color))
 		{
 			return false;
 		}
 	}
-	//if(i!=5)
-	//{
-	//	matchRight(i, j, random);
-	//}
-	//if(j!=0)
-	//{
-	//	matchUp(i, j, random);
-	//}
-	//if(j!=11)
-	//{
-	//	matchDown(i, j, random);
-	//}
+	if(i!=COLUMNS-1)
+	{
+		if(matchRight(i, j, color))
+		{
+			return false;
+		}
+	}
+	if(j!=0)
+	{
+		if(matchUp(i, j, color))
+		{
+			return false;
+		}
+	}
+	if(j!=ROWS-1)
+	{
+		if(matchDown(i, j, color))
+		{
+			return false;
+		}
+	}
 	return true;
 		
 		
 		
 	}
-public boolean matchUp(int i, int j,  int random)
+public boolean matchUp(int i, int j, BlockType color)
 {
-	if(arrayOfBlocks[i][j++]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i][j++]))
-	{
-		return false;
-	}
-	else 
-	{
-		j++;
-		yMatchCounter++;
-		matchUp(i, j, random);
-		return true;
-	}
-	
-}
-public boolean matchDown(int i, int j, int random)
-{
-	if(arrayOfBlocks[i][j-1]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i][j-1]))
+	if(arrayOfBlocks[i][j-1]==null||!(arrayOfBlocks[i][j-1]).match(color))
 	{
 		return false;
 	}
@@ -136,35 +131,55 @@ public boolean matchDown(int i, int j, int random)
 	{
 		j--;
 		yMatchCounter++;
-		matchDown(i, j, random);
+		matchUp(i, j, color);
 		return true;
 	}
 	
 }
-public boolean matchLeft(int i, int j,  int random)
+public boolean matchDown(int i, int j, BlockType color)
+{
+	if(arrayOfBlocks[i][j+1]==null||!(arrayOfBlocks[i][j+1]).match(color))
+	{
+		return false;
+	}
+	else 
+	{
+		j++;
+		yMatchCounter++;
+		matchDown(i, j, color);
+		return true;
+	}
+	
+}
+public boolean matchLeft(int i, int j,  BlockType color)
 {
 	assert(i!=0);
-	if(arrayOfBlocks[i--][j]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i--][j]))
+	assert(j>=6&&j<12);
+	if(arrayOfBlocks[i-1][j]==null||!(arrayOfBlocks[i-1][j]).match(color))
 	{
 		return false;
 	}
 	else 
 	{
 		i--;
+		
 		xMatchCounter++;
 		if(xMatchCounter==3)
 		{
 			return true;
 		}
-		
-		return matchLeft(i, j, random);
+		else if(i!=0)
+		{
+			return matchLeft(i, j, color);
+		}
+		return false;
 	}
 	
 	
 }
-public boolean matchRight(int i, int j,  int random)
+public boolean matchRight(int i, int j, BlockType color)
 {
-	if(arrayOfBlocks[i++][j]==null||!arrayOfBlocks[i][j].match(arrayOfBlocks[i++][j]))
+	if(arrayOfBlocks[i+1][j]==null||!(arrayOfBlocks[i+1][j]).match(color))
 	{
 		return false;
 	}
@@ -172,7 +187,7 @@ public boolean matchRight(int i, int j,  int random)
 	{
 		i++;
 		xMatchCounter++;
-		matchRight(i, j, random);
+		matchRight(i, j, color);
 		return true;
 	}
 	
