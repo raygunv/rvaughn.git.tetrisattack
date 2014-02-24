@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 public class blockHolder {
 
 	Random rn = new Random();
-	int MatchCounter=1;
+	int matchCounter=1;
 	final int ROWS = 12;
 	final int COLUMNS = 6;
 	
@@ -69,24 +69,29 @@ public class blockHolder {
 		}
 
 	}
-/*
-	private boolean isolateBlock(int i1, int i2, int j1, int j2, int random) {
-		
-		if(arrayOfBlocks[i2][j2]==null)
+
+	/* Just for fun EGV ...
+	private boolean canIAddByEGV(int i, int j, BlockType color) {
+		// k=0 go left; k=1 go down
+		for (int k=0; k<=1; k++)
 		{
-			return false;
+			matchCounter=1;
+			int iInput=k*-1; // k=0 gives 0 (left) and k=1 gives -1 (down)
+			int jInput=k-1; // k=0 gives -1 (left) and k=1 gives 0 (down)
+			if ((jInput<0 && j!=0) // check boundary left
+					|| (iInput<0 && i!= 0)) //check boundary down
+			{
+				if(match(i, j, iInput, jInput, color))
+					return false;
+			}
 		}
-		else if(arrayOfBlocks[i1][j1].match(arrayOfBlocks[i2][j2]))
-		{
-			//i--;
-			isolateBlock(i2, j2, random);
-		}
-			
 		return true;
-	}
-*/
+	} */
+	
 private boolean canIAdd(int i, int j, BlockType color) {
-	MatchCounter=1;
+	// GRADING: don't run code that you don't need; for canIadd you only
+	// need left and up but you will need all four in some other method
+	matchCounter=1;
 	int iInput;
 	int jInput;
 	if(j!=0)//left
@@ -107,7 +112,7 @@ private boolean canIAdd(int i, int j, BlockType color) {
 			return false;
 		}
 	}
-	MatchCounter=1;
+	matchCounter=1;
 	if(i!=0)//up
 	{
 		
@@ -128,9 +133,6 @@ private boolean canIAdd(int i, int j, BlockType color) {
 		}
 	}
 	return true;
-		
-		
-		
 }
 
 public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
@@ -144,9 +146,8 @@ public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 	else 
 	{
 		
-		
-		MatchCounter++;
-		if(MatchCounter==3)
+		matchCounter++;
+		if(matchCounter==3)
 		{
 			return true;
 		}
@@ -156,8 +157,6 @@ public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 		}
 		return false;
 	}
-	
-	
 }
 
 public void paneFiller(JPanel pane) {
