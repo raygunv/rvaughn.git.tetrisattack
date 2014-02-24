@@ -10,7 +10,7 @@ public class blockHolder {
 	final int ROWS = 12;
 	final int COLUMNS = 6;
 
-	Block arrayOfBlocks[][] = new Block[6][12];
+	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
 
 	public void arrayFiller() {
 		
@@ -20,9 +20,9 @@ public class blockHolder {
 		int random;
 
 		int startRow = ROWS/2;
-		for (int i = 0; i < COLUMNS; i++) {
+		for (int i = startRow; i < ROWS; i++) {
 
-			for (int j = startRow; j < ROWS; j++) {
+			for (int j = 0; j < COLUMNS; j++) {
 
 				//random = rn.nextInt(6) + 1;
 				// System.out.println(random);
@@ -88,34 +88,34 @@ public class blockHolder {
 private boolean isolateBlock(int i, int j,  BlockType color) {
 	xMatchCounter=1;
 	yMatchCounter=1;
-	if(i!=0)
+	if(j!=0)
 	{
 		if(matchLeft(i, j, color))
 		{
 			return false;
 		}
 	}
-	if(i!=COLUMNS-1)
-	{
-		if(matchRight(i, j, color))
-		{
-			return false;
-		}
-	}
-	if(j!=0)
-	{
-		if(matchUp(i, j, color))
-		{
-			return false;
-		}
-	}
-	if(j!=ROWS-1)
-	{
-		if(matchDown(i, j, color))
-		{
-			return false;
-		}
-	}
+	///if(j!=COLUMNS-1)
+	//{
+		//if(matchRight(i, j, color))
+		//{
+		//	return false;
+		//}
+	//}
+	//if(j!=0)
+	//{
+		//if(matchUp(i, j, color))
+		//{
+		//	return false;
+		//}
+	//}//
+	//if(i!=ROWS-1)
+	//{
+	//	if(matchDown(i, j, color))
+	//	{
+	//		return false;
+	///	}
+	//}
 	return true;
 		
 		
@@ -151,24 +151,23 @@ public boolean matchDown(int i, int j, BlockType color)
 	}
 	
 }
-public boolean matchLeft(int i, int j,  BlockType color)
+public boolean matchLeft(int i, int j, BlockType color)
 {
-	assert(i!=0);
-	assert(j>=6&&j<12);
-	if(arrayOfBlocks[i-1][j]==null||!(arrayOfBlocks[i-1][j]).match(color))
+
+	if(arrayOfBlocks[i][j-1]==null||!(arrayOfBlocks[i][j-1]).match(color))
 	{
 		return false;
 	}
 	else 
 	{
-		i--;
+		j--;
 		
 		xMatchCounter++;
 		if(xMatchCounter==3)
 		{
 			return true;
 		}
-		else if(i!=0)
+		else if(j!=0)
 		{
 			return matchLeft(i, j, color);
 		}
@@ -179,13 +178,13 @@ public boolean matchLeft(int i, int j,  BlockType color)
 }
 public boolean matchRight(int i, int j, BlockType color)
 {
-	if(arrayOfBlocks[i+1][j]==null||!(arrayOfBlocks[i+1][j]).match(color))
+	if(arrayOfBlocks[i][j+1]==null||!(arrayOfBlocks[i][j+1]).match(color))
 	{
 		return false;
 	}
 	else 
 	{
-		i++;
+		j++;
 		xMatchCounter++;
 		matchRight(i, j, color);
 		return true;
@@ -202,8 +201,8 @@ public void paneFiller(JPanel pane) {
 			for (int j = 6; j < 12; j++) {
 				y += 5;
 
-				pane.add(arrayOfBlocks[i][j]);
-				arrayOfBlocks[i][j].setLocation(i * 60 + x, j * 60 + y);
+				pane.add(arrayOfBlocks[j][i]);
+				arrayOfBlocks[j][i].setLocation(i * 60 + x, j * 60 + y);
 
 			}
 		}
