@@ -5,10 +5,10 @@ import javax.swing.JPanel;
 public class blockHolder {
 
 	Random rn = new Random();
-	int yMatchCounter=1;
-	int xMatchCounter=1;
+	int MatchCounter=1;
 	final int ROWS = 12;
 	final int COLUMNS = 6;
+	
 
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
 
@@ -29,7 +29,7 @@ public class blockHolder {
 
 				do {
 					random = rn.nextInt(6);
-				} while (!isolateBlock(i, j, BlockType.values()[random]));
+				} while (!canIAdd(i, j, BlockType.values()[random]));
 				
 				color = BlockType.values()[random];
 				switch (color) {
@@ -85,112 +85,81 @@ public class blockHolder {
 		return true;
 	}
 */
-private boolean isolateBlock(int i, int j,  BlockType color) {
-	xMatchCounter=1;
-	yMatchCounter=1;
-	if(j!=0)
+private boolean canIAdd(int i, int j, BlockType color) {
+	MatchCounter=1;
+	int iInput;
+	int jInput;
+	if(j!=0)//left
 	{
-		if(matchLeft(i, j, color))
+		iInput=0;
+		jInput=-1;
+		if(match(i, j, iInput, jInput, color))
 		{
 			return false;
 		}
 	}
-	///if(j!=COLUMNS-1)
-	//{
-		//if(matchRight(i, j, color))
-		//{
-		//	return false;
-		//}
-	//}
-	//if(j!=0)
-	//{
-		//if(matchUp(i, j, color))
-		//{
-		//	return false;
-		//}
-	//}//
-	//if(i!=ROWS-1)
-	//{
-	//	if(matchDown(i, j, color))
-	//	{
-	//		return false;
-	///	}
-	//}
+	if(j!=COLUMNS-1)//right
+	{
+		iInput=0;
+		jInput=1;
+		if(match(i, j, iInput, jInput, color))
+		{
+			return false;
+		}
+	}
+	MatchCounter=1;
+	if(i!=0)//up
+	{
+		
+		iInput=-1;
+		jInput=0;
+		if(match(i, j, iInput, jInput, color))
+		{
+			return false;
+		}
+	}
+	if(i!=ROWS-1)//down
+	{
+		iInput=1;
+		jInput=0;
+		if(match(i, j, iInput, jInput, color))
+		{
+			return false;
+		}
+	}
 	return true;
 		
 		
 		
-	}
-public boolean matchUp(int i, int j, BlockType color)
-{
-	if(arrayOfBlocks[i][j-1]==null||!(arrayOfBlocks[i][j-1]).match(color))
-	{
-		return false;
-	}
-	else 
-	{
-		j--;
-		yMatchCounter++;
-		matchUp(i, j, color);
-		return true;
-	}
-	
 }
-public boolean matchDown(int i, int j, BlockType color)
-{
-	if(arrayOfBlocks[i][j+1]==null||!(arrayOfBlocks[i][j+1]).match(color))
-	{
-		return false;
-	}
-	else 
-	{
-		j++;
-		yMatchCounter++;
-		matchDown(i, j, color);
-		return true;
-	}
-	
-}
-public boolean matchLeft(int i, int j, BlockType color)
-{
 
-	if(arrayOfBlocks[i][j-1]==null||!(arrayOfBlocks[i][j-1]).match(color))
+public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
+{
+	i+=iInput;
+	j+=jInput;
+	if(arrayOfBlocks[i][j]==null||!(arrayOfBlocks[i][j]).match(color))
 	{
 		return false;
 	}
 	else 
 	{
-		j--;
 		
-		xMatchCounter++;
-		if(xMatchCounter==3)
+		
+		MatchCounter++;
+		if(MatchCounter==3)
 		{
 			return true;
 		}
-		else if(j!=0)
+		else if(j!=0)//need to fix this
 		{
-			return matchLeft(i, j, color);
+			return match(i, j, iInput, jInput, color);
 		}
 		return false;
 	}
 	
 	
 }
-public boolean matchRight(int i, int j, BlockType color)
-{
-	if(arrayOfBlocks[i][j+1]==null||!(arrayOfBlocks[i][j+1]).match(color))
-	{
-		return false;
-	}
-	else 
-	{
-		j++;
-		xMatchCounter++;
-		matchRight(i, j, color);
-		return true;
-	}
-	
-}
+
 public void paneFiller(JPanel pane) {
 		int x = 0;
 		int y = 0;
