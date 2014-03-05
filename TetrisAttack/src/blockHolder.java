@@ -103,7 +103,7 @@ private boolean canIAdd(int i, int j, BlockType color) {
 			return false;
 		}
 	}
-	if(j!=COLUMNS-1)//right
+	/*if(j!=COLUMNS-1)//right
 	{
 		iInput=0;
 		jInput=1;
@@ -112,10 +112,10 @@ private boolean canIAdd(int i, int j, BlockType color) {
 			return false;
 		}
 	}
+	*/
 	matchCounter=1;
 	if(i!=0)//up
 	{
-		
 		iInput=-1;
 		jInput=0;
 		if(match(i, j, iInput, jInput, color))
@@ -123,7 +123,7 @@ private boolean canIAdd(int i, int j, BlockType color) {
 			return false;
 		}
 	}
-	if(i!=ROWS-1)//down
+	/*if(i!=ROWS-1)//down
 	{
 		iInput=1;
 		jInput=0;
@@ -132,31 +132,34 @@ private boolean canIAdd(int i, int j, BlockType color) {
 			return false;
 		}
 	}
+	*/
 	return true;
+	
 }
 
 public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 {
+	assert(i>=0 && i<=ROWS);
+	assert(j>=0 && j<=COLUMNS);
 	i+=iInput;
 	j+=jInput;
-	if(arrayOfBlocks[i][j]==null||!(arrayOfBlocks[i][j]).match(color))
+	if(i==ROWS||i==-1||j==-1||j==COLUMNS)
+	{
+		return false;
+	}
+	else if(arrayOfBlocks[i][j]==null||!(arrayOfBlocks[i][j]).match(color))
 	{
 		return false;
 	}
 	else 
-	{
-		
+	{	
 		matchCounter++;
 		if(matchCounter==3)
 		{
 			return true;
 		}
-		else if(j!=0)//need to fix this
-		{
-			return match(i, j, iInput, jInput, color);
-		}
-		return false;
 	}
+	return match(i, j, iInput, jInput, color);
 }
 
 public void paneFiller(JPanel pane) {
