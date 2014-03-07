@@ -48,7 +48,7 @@ public class Frame extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBounds(69, 78, 10, 10);
 		contentPane.add(panel);
-		
+		addKeyListener(new Cursor());
 		
 	}
 }

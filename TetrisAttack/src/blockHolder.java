@@ -136,7 +136,14 @@ private boolean canIAdd(int i, int j, BlockType color) {
 	return true;
 	
 }
-
+public void switchBlocks(int i, int j)
+{
+	
+	Block copyBlock =new Block(arrayOfBlocks[i][j]);
+	
+	arrayOfBlocks[i][j]=arrayOfBlocks[i+1][j];
+	arrayOfBlocks[i+1][j]=copyBlock;
+}
 public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 {
 	assert(i>=0 && i<=ROWS);

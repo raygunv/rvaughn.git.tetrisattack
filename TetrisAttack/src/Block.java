@@ -11,6 +11,12 @@ public class Block extends JPanel
 		yLoc=y;
 		setSize(60,60);
 	}
+	public Block(Block oldBlock)
+	{
+		this.xLoc=oldBlock.xLoc;
+		this.yLoc=oldBlock.yLoc;
+		this.setSize(60,60);
+	}
 	public boolean match(BlockType color)
 	{
 		return false;
