@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -8,10 +9,9 @@ public class blockHolder {
 	int matchCounter=1;
 	final int ROWS = 12;
 	final int COLUMNS = 6;
-	
-
+	JPanel myPane;
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
-
+	
 	public void arrayFiller() {
 		
 
@@ -139,10 +139,11 @@ private boolean canIAdd(int i, int j, BlockType color) {
 public void switchBlocks(int i, int j)
 {
 	
-	Block copyBlock =new Block(arrayOfBlocks[i][j]);
-	
-	arrayOfBlocks[i][j]=arrayOfBlocks[i+1][j];
-	arrayOfBlocks[i+1][j]=copyBlock;
+	//Block copyBlock =arrayOfBlocks[i][j].clone();
+	Block copyBlock =arrayOfBlocks[i][j];
+	arrayOfBlocks[i][j]=arrayOfBlocks[i][j+1];
+	arrayOfBlocks[i][j+1]=copyBlock;
+	drawPane(myPane);
 }
 public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 {
@@ -169,9 +170,11 @@ public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 	return match(i, j, iInput, jInput, color);
 }
 
-public void paneFiller(JPanel pane) {
+public void drawPane(JPanel pane) {
 		int x = 0;
 		int y = 0;
+		
+		myPane=pane;
 		for (int i = 0; i < 6; i++) {
 			x += 5;
 			y = 0;
@@ -181,6 +184,7 @@ public void paneFiller(JPanel pane) {
 
 				pane.add(arrayOfBlocks[j][i]);
 				arrayOfBlocks[j][i].setLocation(i * 60 + x, j * 60 + y);
+				
 
 			}
 		}

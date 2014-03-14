@@ -43,12 +43,12 @@ public class Frame extends JFrame {
 		
 		blockHolder holder=new blockHolder();
 		holder.arrayFiller();
-		holder.paneFiller(contentPane);
+		holder.drawPane(contentPane);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(69, 78, 10, 10);
-		contentPane.add(panel);
-		addKeyListener(new Cursor());
+		//JPanel panel = new JPanel();
+		//panel.setBounds(69, 78, 10, 10);
+		//contentPane.add(panel);
+		addKeyListener(new Cursor(holder));
 		
 	}
 }
