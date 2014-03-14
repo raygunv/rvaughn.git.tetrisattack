@@ -10,6 +10,7 @@ public class blockHolder {
 	final int ROWS = 12;
 	final int COLUMNS = 6;
 	JPanel myPane;
+	JPanel cursor;
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
 	
 	public void arrayFiller() {
@@ -179,15 +180,24 @@ public void drawPane(JPanel pane) {
 			x += 5;
 			y = 0;
 
-			for (int j = 6; j < 12; j++) {
+			for (int j = 0; j < 12; j++) {
 				y += 5;
-
-				pane.add(arrayOfBlocks[j][i]);
-				arrayOfBlocks[j][i].setLocation(i * 60 + x, j * 60 + y);
+				if(arrayOfBlocks[j][i]!=null)
+				{
+					pane.add(arrayOfBlocks[j][i]);
+					arrayOfBlocks[j][i].setLocation(i * 60 + x, j * 60 + y);
+				}
+				
 				
 
 			}
 		}
 	}
+public void drawCursor(JPanel cursor)
+{
+	myPane.add(cursor);
+
+	
+}
 
 }

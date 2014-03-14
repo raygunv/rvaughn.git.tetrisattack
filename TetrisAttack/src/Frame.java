@@ -35,15 +35,17 @@ public class Frame extends JFrame {
 	public Frame() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 410, 790);
+		setBounds(100, 100, 411, 823);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(255, 240, 245));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		blockHolder holder=new blockHolder();
 		holder.arrayFiller();
 		holder.drawPane(contentPane);
+		//holder.drawCursor(contentPane);
 		
 		//JPanel panel = new JPanel();
 		//panel.setBounds(69, 78, 10, 10);
