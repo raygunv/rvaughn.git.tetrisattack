@@ -19,4 +19,8 @@ public class redBlock extends Block {
 	{
 		return otherBlock.match(BlockType.RED);
 	}
+	public BlockType getColor()
+	{
+		return BlockType.RED;
+	}
 }

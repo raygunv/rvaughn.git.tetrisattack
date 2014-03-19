@@ -20,4 +20,8 @@ public class blueBlock extends Block {
 	{
 		return otherBlock.match(BlockType.BLUE);
 	}
+	public BlockType getColor()
+	{
+		return BlockType.BLUE;
+	}
 }

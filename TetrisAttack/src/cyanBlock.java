@@ -19,4 +19,8 @@ public class cyanBlock extends Block {
 	{
 		return otherBlock.match(BlockType.CYAN);
 	}
+	public BlockType getColor()
+	{
+		return BlockType.CYAN;
+	}
 }

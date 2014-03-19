@@ -20,4 +20,8 @@ public class Block extends JPanel implements Cloneable
 	{
 		return false;
 	}
+	public BlockType getColor()
+	{
+		return BlockType.NONE;
+	}
 }

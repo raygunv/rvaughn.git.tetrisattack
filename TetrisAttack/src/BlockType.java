@@ -1,4 +1,4 @@
 
 public enum BlockType {
-	RED, BLUE, CYAN, PURPLE, YELLOW, GREEN
+	RED, BLUE, CYAN, PURPLE, YELLOW, GREEN, NONE
 }

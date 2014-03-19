@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.GridLayout;
 import java.awt.Color;
 
@@ -51,6 +52,7 @@ public class Frame extends JFrame {
 		//panel.setBounds(69, 78, 10, 10);
 		//contentPane.add(panel);
 		addKeyListener(new Cursor(holder));
+		
 		
 	}
 }

@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -9,6 +10,7 @@ public class blockHolder {
 	int matchCounter=1;
 	final int ROWS = 12;
 	final int COLUMNS = 6;
+	LinkedList pointer;
 	JPanel myPane;
 	JPanel cursor;
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
@@ -144,6 +146,8 @@ public void switchBlocks(int i, int j)
 	Block copyBlock =arrayOfBlocks[i][j];
 	arrayOfBlocks[i][j]=arrayOfBlocks[i][j+1];
 	arrayOfBlocks[i][j+1]=copyBlock;
+	disappear(i, j);
+	disappear(i, j+1);
 	drawPane(myPane);
 }
 public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
@@ -163,6 +167,7 @@ public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 	else 
 	{	
 		matchCounter++;
+		
 		if(matchCounter==3)
 		{
 			return true;
@@ -170,7 +175,75 @@ public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 	}
 	return match(i, j, iInput, jInput, color);
 }
-
+public void disappear(int i, int j)
+{
+	matchCounter=1;
+	int iInput;
+	int jInput;
+	BlockType color=arrayOfBlocks[i][j].getColor();
+	if(j!=0)//left
+	{
+		iInput=0;
+		jInput=-1;
+		if(match(i, j, iInput, jInput, color))
+		{
+			pointer.addLast(arrayOfBlocks[i][j]);
+			
+		}
+	}
+	if(j!=COLUMNS-1)//right
+	{
+		iInput=0;
+		jInput=1;
+		if(match(i, j, iInput, jInput, color))
+		{
+			pointer.addLast(arrayOfBlocks[i][j]);
+			System.out.println(matchCounter);
+		}
+	}
+	int matchCounterX=matchCounter;
+	matchCounter=1;
+	if(i!=0)//up
+	{
+		iInput=-1;
+		jInput=0;
+		if(match(i, j, iInput, jInput, color))
+		{
+			pointer.addLast(arrayOfBlocks[i][j]);
+			System.out.println(matchCounter);
+		}
+	}
+	if(i!=ROWS-1)//down
+	{
+		iInput=1;
+		jInput=0;
+		if(match(i, j, iInput, jInput, color))
+		{
+			pointer.addLast(arrayOfBlocks[i][j]);
+			System.out.println(matchCounter);
+		}
+	}
+	int matchCounterY=matchCounter;
+	
+	if(matchCounterX>=3||matchCounterY>=3)
+	{
+		collapse();
+	}
+	else
+	{
+	//cleanup
+	}
+}
+public void collapse()
+{
+	Block hold;
+	for(int z=1;z<=pointer.size(); z++)
+	{
+		hold=(Block)pointer.removeFirst();
+		System.out.println(hold.getColor());
+		
+	}
+}
 public void drawPane(JPanel pane) {
 		int x = 0;
 		int y = 0;
