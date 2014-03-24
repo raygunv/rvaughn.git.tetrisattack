@@ -1,27 +1,32 @@
 
 import javax.swing.JPanel;
 
-public class Block extends JPanel implements Cloneable
+public abstract class Block extends JPanel implements Cloneable
 {		
 
-	int xLoc, yLoc;
-	public Block(int x, int y)
+	static int iLoc;
+	static int jLoc;
+	public Block(int i, int j)
 	{
-		xLoc=x;
-		yLoc=y;
+		iLoc=i;
+		jLoc=j;
 		setSize(60,60);
 	}
 	
-	public boolean match(BlockType color)
+	
+	public abstract boolean match(BlockType color);
+	
+	//public boolean match(Block color)
+	
+	public abstract BlockType getColor();
+	public static int getI()
 	{
-		return false;
+		return iLoc;
 	}
-	public boolean match(Block color)
+	
+	public static int getJ()
 	{
-		return false;
+		return jLoc;
 	}
-	public BlockType getColor()
-	{
-		return BlockType.NONE;
-	}
+	
 }

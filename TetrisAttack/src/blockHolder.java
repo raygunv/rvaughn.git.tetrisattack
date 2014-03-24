@@ -10,7 +10,7 @@ public class blockHolder {
 	int matchCounter=1;
 	final int ROWS = 12;
 	final int COLUMNS = 6;
-	LinkedList pointer;
+	LinkedList<Block> matchBlockList=new LinkedList<Block>();
 	JPanel myPane;
 	JPanel cursor;
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
@@ -187,7 +187,7 @@ public void disappear(int i, int j)
 		jInput=-1;
 		if(match(i, j, iInput, jInput, color))
 		{
-			pointer.addLast(arrayOfBlocks[i][j]);
+			matchBlockList.addLast(arrayOfBlocks[i][j]);
 			
 		}
 	}
@@ -197,7 +197,7 @@ public void disappear(int i, int j)
 		jInput=1;
 		if(match(i, j, iInput, jInput, color))
 		{
-			pointer.addLast(arrayOfBlocks[i][j]);
+			matchBlockList.addLast(arrayOfBlocks[i][j]);
 			System.out.println(matchCounter);
 		}
 	}
@@ -209,7 +209,7 @@ public void disappear(int i, int j)
 		jInput=0;
 		if(match(i, j, iInput, jInput, color))
 		{
-			pointer.addLast(arrayOfBlocks[i][j]);
+			matchBlockList.addLast(arrayOfBlocks[i][j]);
 			System.out.println(matchCounter);
 		}
 	}
@@ -219,7 +219,7 @@ public void disappear(int i, int j)
 		jInput=0;
 		if(match(i, j, iInput, jInput, color))
 		{
-			pointer.addLast(arrayOfBlocks[i][j]);
+			matchBlockList.addLast(arrayOfBlocks[i][j]);
 			System.out.println(matchCounter);
 		}
 	}
@@ -237,9 +237,11 @@ public void disappear(int i, int j)
 public void collapse()
 {
 	Block hold;
-	for(int z=1;z<=pointer.size(); z++)
+	int i=Block.getI();
+	int j=Block.getJ();
+	for(int z=1;z<=matchBlockList.size(); z++)
 	{
-		hold=(Block)pointer.removeFirst();
+		hold=(Block)matchBlockList.removeFirst();
 		System.out.println(hold.getColor());
 		
 	}
