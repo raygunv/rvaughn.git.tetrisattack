@@ -236,12 +236,16 @@ public void disappear(int i, int j)
 }
 public void collapse()
 {
+	int i;
+	int j;
 	Block hold;
-	int i=Block.getI();
-	int j=Block.getJ();
+	
 	for(int z=1;z<=matchBlockList.size(); z++)
 	{
 		hold=(Block)matchBlockList.removeFirst();
+		i=hold.getI();
+		j=hold.getJ();
+		arrayOfBlocks[i][j]=new noneBlock(i, j);
 		System.out.println(hold.getColor());
 		
 	}
