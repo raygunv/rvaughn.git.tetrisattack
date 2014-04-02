@@ -246,7 +246,7 @@ public void collapse()
 		i=hold.getI();
 		j=hold.getJ();
 		arrayOfBlocks[i][j]=new noneBlock(i, j);
-		System.out.println(hold.getColor());
+		System.out.println(arrayOfBlocks[i][j].getColor());
 		
 	}
 }
