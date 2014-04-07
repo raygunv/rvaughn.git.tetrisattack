@@ -15,7 +15,7 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 	final int COLUMNS = 6;
 	int xCur=ROWS/2;
 	int yCur=COLUMNS/2-1;
-	
+		
 	
 	public Cursor(blockHolder bh){
 		holder=bh;
@@ -23,7 +23,7 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 		setBackground(new Color(255, 240, 245));
 		setBorder(new LineBorder(new Color(0, 0, 0), 3));
 		setSize(133, 68);
-		holder.drawCursor(this);
+		myGame.drawCursor(this);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -68,7 +68,7 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 		}
 		
 		setLocation(yCur*60 + yCur*5+1, xCur*60 + xCur*5+1);
-		holder.drawCursor(this);
+		myGame.drawCursor(this);
 	}
 	@Override
 	public void keyReleased(KeyEvent k) {

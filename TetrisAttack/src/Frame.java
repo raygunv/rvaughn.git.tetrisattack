@@ -12,6 +12,7 @@ import java.awt.Color;
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
+	
 
 	/**
 	 * Launch the application.
@@ -42,16 +43,16 @@ public class Frame extends JFrame {
 		contentPane.setBackground(new Color(255, 240, 245));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		game myGame=new game(contentPane);
+		myGame.start();
+		addKeyListener(myGame.getCursor());
 		
-		blockHolder holder=new blockHolder();
-		holder.arrayFiller();
-		holder.drawPane(contentPane);
 		//holder.drawCursor(contentPane);
 		
 		//JPanel panel = new JPanel();
 		//panel.setBounds(69, 78, 10, 10);
 		//contentPane.add(panel);
-		addKeyListener(new Cursor(holder));
+		
 		
 		
 	}

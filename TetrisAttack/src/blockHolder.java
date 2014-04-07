@@ -245,7 +245,7 @@ public void collapse()
 		hold=(Block)matchBlockList.removeFirst();
 		i=hold.getI();
 		j=hold.getJ();
-		arrayOfBlocks[i][j]=new noneBlock(i, j);
+		//arrayOfBlocks[i][j]=new noneBlock(i, j);
 		System.out.println(hold.getColor());
 		
 	}
@@ -272,11 +272,6 @@ public void drawPane(JPanel pane) {
 			}
 		}
 	}
-public void drawCursor(JPanel cursor)
-{
-	myPane.add(cursor);
 
-	
-}
 
 }
