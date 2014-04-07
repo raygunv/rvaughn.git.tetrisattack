@@ -10,15 +10,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 public  class Cursor extends JPanel implements ActionListener, KeyListener {
-	blockHolder holder;
+//	blockHolder holder;
+	Game myGame;
 	final int ROWS = 12;
 	final int COLUMNS = 6;
 	int xCur=ROWS/2;
 	int yCur=COLUMNS/2-1;
 		
 	
-	public Cursor(blockHolder bh){
-		holder=bh;
+	public Cursor(Game mg){
+//		holder=bh;
+		myGame = mg;
 		setLocation(yCur*60 + (yCur)*5+1, xCur*60 + (xCur)*5+1);
 		setBackground(new Color(255, 240, 245));
 		setBorder(new LineBorder(new Color(0, 0, 0), 3));
@@ -36,7 +38,7 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		if(k.getKeyChar()==' ')
 		{
-			holder.switchBlocks(xCur, yCur);
+			myGame.switchBlocks(xCur, yCur);
 		}
 		if(k.getKeyChar()=='d')
 		{

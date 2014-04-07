@@ -43,7 +43,7 @@ public class Frame extends JFrame {
 		contentPane.setBackground(new Color(255, 240, 245));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		game myGame=new game(contentPane);
+		Game myGame=new Game(contentPane);
 		myGame.start();
 		addKeyListener(myGame.getCursor());
 		

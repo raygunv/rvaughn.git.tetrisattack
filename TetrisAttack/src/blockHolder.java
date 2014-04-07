@@ -73,205 +73,175 @@ public class blockHolder {
 
 	}
 
-	/* Just for fun EGV ...
-	private boolean canIAddByEGV(int i, int j, BlockType color) {
-		// k=0 go left; k=1 go down
-		for (int k=0; k<=1; k++)
+
+	
+	private boolean canIAdd(int i, int j, BlockType color) {
+		
+		matchCounter=1;
+		int iInput;
+		int jInput;
+		if(j!=0)//left
 		{
-			matchCounter=1;
-			int iInput=k*-1; // k=0 gives 0 (left) and k=1 gives -1 (down)
-			int jInput=k-1; // k=0 gives -1 (left) and k=1 gives 0 (down)
-			if ((jInput<0 && j!=0) // check boundary left
-					|| (iInput<0 && i!= 0)) //check boundary down
+			iInput=0;
+			jInput=-1;
+			if(match(i, j, iInput, jInput, color))
 			{
-				if(match(i, j, iInput, jInput, color))
-					return false;
+				return false;
 			}
 		}
+		
+		matchCounter=1;
+		if(i!=0)//up
+		{
+			iInput=-1;
+			jInput=0;
+			if(match(i, j, iInput, jInput, color))
+			{
+				return false;
+			}
+		}
+		
 		return true;
-	} */
-	
-private boolean canIAdd(int i, int j, BlockType color) {
-	// GRADING: don't run code that you don't need; for canIadd you only
-	// need left and up but you will need all four in some other method
-	matchCounter=1;
-	int iInput;
-	int jInput;
-	if(j!=0)//left
-	{
-		iInput=0;
-		jInput=-1;
-		if(match(i, j, iInput, jInput, color))
-		{
-			return false;
-		}
-	}
-	/*if(j!=COLUMNS-1)//right
-	{
-		iInput=0;
-		jInput=1;
-		if(match(i, j, iInput, jInput, color))
-		{
-			return false;
-		}
-	}
-	*/
-	matchCounter=1;
-	if(i!=0)//up
-	{
-		iInput=-1;
-		jInput=0;
-		if(match(i, j, iInput, jInput, color))
-		{
-			return false;
-		}
-	}
-	/*if(i!=ROWS-1)//down
-	{
-		iInput=1;
-		jInput=0;
-		if(match(i, j, iInput, jInput, color))
-		{
-			return false;
-		}
-	}
-	*/
-	return true;
-	
-}
-public void switchBlocks(int i, int j)
-{
-	
-	//Block copyBlock =arrayOfBlocks[i][j].clone();
-	Block copyBlock =arrayOfBlocks[i][j];
-	arrayOfBlocks[i][j]=arrayOfBlocks[i][j+1];
-	arrayOfBlocks[i][j+1]=copyBlock;
-	disappear(i, j);
-	disappear(i, j+1);
-	drawPane(myPane);
-}
-public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
-{
-	assert(i>=0 && i<=ROWS);
-	assert(j>=0 && j<=COLUMNS);
-	i+=iInput;
-	j+=jInput;
-	if(i==ROWS||i==-1||j==-1||j==COLUMNS)
-	{
-		return false;
-	}
-	else if(arrayOfBlocks[i][j]==null||!(arrayOfBlocks[i][j]).match(color))
-	{
-		return false;
-	}
-	else 
-	{	
-		matchCounter++;
 		
-		if(matchCounter==3)
-		{
-			return true;
-		}
 	}
-	return match(i, j, iInput, jInput, color);
-}
-public void disappear(int i, int j)
-{
-	matchCounter=1;
-	int iInput;
-	int jInput;
-	BlockType color=arrayOfBlocks[i][j].getColor();
-	if(j!=0)//left
+	
+	public void switchBlocks(int i, int j)
 	{
-		iInput=0;
-		jInput=-1;
-		if(match(i, j, iInput, jInput, color))
+		
+		//Block copyBlock =arrayOfBlocks[i][j].clone();
+		Block copyBlock =arrayOfBlocks[i][j];
+		arrayOfBlocks[i][j]=arrayOfBlocks[i][j+1];
+		arrayOfBlocks[i][j+1]=copyBlock;
+		disappear(i, j);
+		disappear(i, j+1);
+		drawPane(myPane);
+	}
+	
+	public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
+	{
+		assert(i>=0 && i<=ROWS);
+		assert(j>=0 && j<=COLUMNS);
+		i+=iInput;
+		j+=jInput;
+		if(i==ROWS||i==-1||j==-1||j==COLUMNS)
 		{
-			matchBlockList.addLast(arrayOfBlocks[i][j]);
+			return false;
+		}
+		else if(arrayOfBlocks[i][j]==null||!(arrayOfBlocks[i][j]).match(color))
+		{
+			return false;
+		}
+		else 
+		{	
+			matchCounter++;
 			
+			if(matchCounter==3)
+			{
+				return true;
+			}
 		}
+		return match(i, j, iInput, jInput, color);
 	}
-	if(j!=COLUMNS-1)//right
-	{
-		iInput=0;
-		jInput=1;
-		if(match(i, j, iInput, jInput, color))
-		{
-			matchBlockList.addLast(arrayOfBlocks[i][j]);
-			System.out.println(matchCounter);
-		}
-	}
-	int matchCounterX=matchCounter;
-	matchCounter=1;
-	if(i!=0)//up
-	{
-		iInput=-1;
-		jInput=0;
-		if(match(i, j, iInput, jInput, color))
-		{
-			matchBlockList.addLast(arrayOfBlocks[i][j]);
-			System.out.println(matchCounter);
-		}
-	}
-	if(i!=ROWS-1)//down
-	{
-		iInput=1;
-		jInput=0;
-		if(match(i, j, iInput, jInput, color))
-		{
-			matchBlockList.addLast(arrayOfBlocks[i][j]);
-			System.out.println(matchCounter);
-		}
-	}
-	int matchCounterY=matchCounter;
 	
-	if(matchCounterX>=3||matchCounterY>=3)
+	public void disappear(int i, int j)
 	{
-		collapse();
-	}
-	else
-	{
-	//cleanup
-	}
-}
-public void collapse()
-{
-	int i;
-	int j;
-	Block hold;
-	
-	for(int z=1;z<=matchBlockList.size(); z++)
-	{
-		hold=(Block)matchBlockList.removeFirst();
-		i=hold.getI();
-		j=hold.getJ();
-		//arrayOfBlocks[i][j]=new noneBlock(i, j);
-		System.out.println(hold.getColor());
+		matchCounter=1;
+		int iInput;
+		int jInput;
+		BlockType color=arrayOfBlocks[i][j].getColor();
+		if(j!=0)//left
+		{
+			iInput=0;
+			jInput=-1;
+			if(match(i, j, iInput, jInput, color))
+			{
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
+				
+			}
+		}
+		if(j!=COLUMNS-1)//right
+		{
+			iInput=0;
+			jInput=1;
+			if(match(i, j, iInput, jInput, color))
+			{
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
+				System.out.println(matchCounter);
+			}
+		}
+		int matchCounterX=matchCounter;
+		matchCounter=1;
+		if(i!=0)//up
+		{
+			iInput=-1;
+			jInput=0;
+			if(match(i, j, iInput, jInput, color))
+			{
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
+				System.out.println(matchCounter);
+			}
+		}
+		if(i!=ROWS-1)//down
+		{
+			iInput=1;
+			jInput=0;
+			if(match(i, j, iInput, jInput, color))
+			{
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
+				System.out.println(matchCounter);
+			}
+		}
+		int matchCounterY=matchCounter;
 		
+		if(matchCounterX>=3||matchCounterY>=3)
+		{
+			collapse();
+		}
+		else
+		{
+		//cleanup
+		}
 	}
-}
-public void drawPane(JPanel pane) {
+	
+	public void collapse()
+	{
+		int i;
+		int j;
+		Block hold;
+		
+		for(int z=1;z<=matchBlockList.size(); z++)
+		{
+			hold=(Block)matchBlockList.removeFirst();
+			i=hold.getI();
+			j=hold.getJ();
+			
+			System.out.println(hold.getColor());
+			arrayOfBlocks[i][j]=new noneBlock(i, j);
+			System.out.println(arrayOfBlocks[i][j].getColor());
+		}
+	}
+
+	public void drawPane(JPanel pane) 
+	{
 		int x = 0;
 		int y = 0;
 		
 		myPane=pane;
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) 
+		{
 			x += 5;
 			y = 0;
 
-			for (int j = 0; j < 12; j++) {
+			for (int j = 0; j < 12; j++) 
+			{
 				y += 5;
 				if(arrayOfBlocks[j][i]!=null)
 				{
 					pane.add(arrayOfBlocks[j][i]);
 					arrayOfBlocks[j][i].setLocation(i * 60 + x, j * 60 + y);
 				}
-				
-				
-
 			}
 		}
 	}
-
 
 }
