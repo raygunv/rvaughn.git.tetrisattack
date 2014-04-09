@@ -112,9 +112,14 @@ public class blockHolder {
 		Block copyBlock =arrayOfBlocks[i][j];
 		arrayOfBlocks[i][j]=arrayOfBlocks[i][j+1];
 		arrayOfBlocks[i][j+1]=copyBlock;
-		disappear(i, j);
-		disappear(i, j+1);
 		drawPane(myPane);
+		disappear(i, j);
+		if(arrayOfBlocks[i][j+1]!=null)
+		{
+			disappear(i, j+1);
+		}
+		drawPane(myPane);
+		
 	}
 	
 	public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
@@ -216,8 +221,9 @@ public class blockHolder {
 			j=hold.getJ();
 			
 			System.out.println(hold.getColor());
-			arrayOfBlocks[i][j]=new noneBlock(i, j);
-			System.out.println(arrayOfBlocks[i][j].getColor());
+			arrayOfBlocks[i][j]=null;
+			//new noneBlock(i, j);
+			//System.out.println(arrayOfBlocks[i][j].getColor());
 		}
 	}
 
