@@ -12,9 +12,18 @@ public class blockHolder {
 	final int COLUMNS = 6;
 	LinkedList<Block> matchBlockList=new LinkedList<Block>();
 	JPanel myPane;
-	JPanel cursor;
+	JPanel myCursor;
+	Frame myFrame;
+	Game myGame;
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
 	
+	public blockHolder(Game game) {
+		myGame = game;
+		myPane = myGame.getPane();
+		myCursor = myGame.getCursor();
+		myFrame = myGame.getFrame();
+	}
+
 	public void arrayFiller() {
 		
 
@@ -105,14 +114,25 @@ public class blockHolder {
 		
 	}
 	
+	private void relocateBlock(Block block, int i, int j)
+	{
+		block.iLoc=1;
+		block.jLoc=j;
+		arrayOfBlocks[i][j]=block;
+	}
+	
 	public void switchBlocks(int i, int j)
 	{
+//		Block copyBlock = arrayOfBlocks[i][j].clone();
+//		Block firstBlock = arrayOfBlocks[i][j].clone();
+//		Block secondBlock = arrayOfBlocks[i][j+1].clone();
 		
-		//Block copyBlock =arrayOfBlocks[i][j].clone();
-		Block copyBlock =arrayOfBlocks[i][j];
-		arrayOfBlocks[i][j]=arrayOfBlocks[i][j+1];
-		arrayOfBlocks[i][j+1]=copyBlock;
-		drawPane(myPane);
+		// doesn't work - stomping on second block - need clone or something
+		Block firstBlock = arrayOfBlocks[i][j];
+		Block secondBlock = arrayOfBlocks[i][j+1];
+		relocateBlock(firstBlock, i, j+1);
+		relocateBlock(secondBlock, i, j);
+		
 		disappear(i, j);
 		if(arrayOfBlocks[i][j+1]!=null)
 		{
@@ -216,7 +236,7 @@ public class blockHolder {
 		
 		for(int z=1;z<=matchBlockList.size(); z++)
 		{
-			hold=(Block)matchBlockList.removeFirst();
+ 			hold=(Block)matchBlockList.removeFirst();
 			i=hold.getI();
 			j=hold.getJ();
 			
@@ -232,7 +252,8 @@ public class blockHolder {
 		int x = 0;
 		int y = 0;
 		
-		myPane=pane;
+		pane.removeAll();
+		
 		for (int i = 0; i < 6; i++) 
 		{
 			x += 5;
@@ -248,6 +269,9 @@ public class blockHolder {
 				}
 			}
 		}
+		pane.validate();
+		pane.repaint();
+		
 	}
 
 }
