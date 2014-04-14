@@ -2,6 +2,7 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class blockHolder {
@@ -111,7 +112,10 @@ public class blockHolder {
 		//Block copyBlock =arrayOfBlocks[i][j].clone();
 		Block copyBlock =arrayOfBlocks[i][j];
 		arrayOfBlocks[i][j]=arrayOfBlocks[i][j+1];
+		arrayOfBlocks[i][j].jLoc=j;
+		
 		arrayOfBlocks[i][j+1]=copyBlock;
+		arrayOfBlocks[i][j+1].jLoc=j+1;
 		drawPane(myPane);
 		disappear(i, j);
 		if(arrayOfBlocks[i][j+1]!=null)
@@ -245,6 +249,7 @@ public class blockHolder {
 				{
 					pane.add(arrayOfBlocks[j][i]);
 					arrayOfBlocks[j][i].setLocation(i * 60 + x, j * 60 + y);
+					arrayOfBlocks[j][i].add(new JLabel(i+", "+j));
 				}
 			}
 		}
