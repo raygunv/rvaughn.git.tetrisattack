@@ -1,28 +1,40 @@
 import javax.swing.JPanel;
-
+import javax.swing.JFrame;
 
 public class Game
 {
 	blockHolder holder;
-	static JPanel pane;
+	JPanel myPane;
+	Frame myFrame;
 	Cursor myCursor;
+
+	public Game(Frame frame)
+	{
+		myFrame=frame;
+		myPane=frame.getPane();
+	}
 	
 	public void start()
 	{
-		holder=new blockHolder();
+		holder=new blockHolder(this);
 		holder.arrayFiller();
-		holder.drawPane(pane);
+		holder.drawPane();
 		myCursor = new Cursor(this);
-	}
-
-	public Game(JPanel contentPane)
-	{
-		pane=contentPane;
+		myFrame.addKeyListener(myCursor);
 	}
 	
 	public void switchBlocks(int i, int j)
 	{
 		holder.switchBlocks(i, j);
+	}
+	
+	public JPanel getPane()
+	{
+		return myPane;
+	}
+	public Frame getFrame()
+	{
+		return myFrame;
 	}
 	
 	public Cursor getCursor()
@@ -32,7 +44,7 @@ public class Game
 	
 	public void drawCursor(JPanel cursor)
 	{
-		pane.add(cursor);
+		myPane.add(cursor);
 	
 	}
 }

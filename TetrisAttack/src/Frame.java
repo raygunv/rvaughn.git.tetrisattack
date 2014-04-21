@@ -41,19 +41,21 @@ public class Frame extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBackground(new Color(255, 240, 245));
-		setContentPane(contentPane);
+		//setContentPane(contentPane);
+		add(contentPane);
 		contentPane.setLayout(null);
-		Game myGame=new Game(contentPane);
+		Game myGame=new Game(this);
 		myGame.start();
-		addKeyListener(myGame.getCursor());
 		
+		//addKeyListener(myGame.getCursor());
 		//holder.drawCursor(contentPane);
-		
 		//JPanel panel = new JPanel();
 		//panel.setBounds(69, 78, 10, 10);
 		//contentPane.add(panel);
-		
-		
-		
 	}
+	public JPanel getPane()
+	{
+		return contentPane;
+	}
+	
 }
