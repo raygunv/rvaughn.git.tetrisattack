@@ -2,6 +2,7 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class blockHolder {
@@ -109,25 +110,20 @@ public class blockHolder {
 				return false;
 			}
 		}
-		
 		return true;
-		
+
 	}
 	
 	private void relocateBlock(Block block, int i, int j)
 	{
-		block.iLoc=1;
+		block.iLoc=i;
 		block.jLoc=j;
 		arrayOfBlocks[i][j]=block;
 	}
 	
 	public void switchBlocks(int i, int j)
 	{
-//		Block copyBlock = arrayOfBlocks[i][j].clone();
-//		Block firstBlock = arrayOfBlocks[i][j].clone();
-//		Block secondBlock = arrayOfBlocks[i][j+1].clone();
-		
-		// doesn't work - stomping on second block - need clone or something
+
 		Block firstBlock = arrayOfBlocks[i][j];
 		Block secondBlock = arrayOfBlocks[i][j+1];
 		relocateBlock(firstBlock, i, j+1);
@@ -138,11 +134,11 @@ public class blockHolder {
 		{
 			disappear(i, j+1);
 		}
-		drawPane(myPane);
+		drawPane();
 		
 	}
 	
-	public boolean match(int i, int j, int iInput, int jInput,  BlockType color)
+	private boolean match(int i, int j, int iInput, int jInput,  BlockType color)
 	{
 		assert(i>=0 && i<=ROWS);
 		assert(j>=0 && j<=COLUMNS);
@@ -160,15 +156,19 @@ public class blockHolder {
 		{	
 			matchCounter++;
 			
+			
 			if(matchCounter==3)
 			{
+				System.out.println(matchBlockList.size());
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
 				return true;
 			}
+			
 		}
 		return match(i, j, iInput, jInput, color);
 	}
 	
-	public void disappear(int i, int j)
+	private void disappear(int i, int j)
 	{
 		matchCounter=1;
 		int iInput;
@@ -180,7 +180,7 @@ public class blockHolder {
 			jInput=-1;
 			if(match(i, j, iInput, jInput, color))
 			{
-				matchBlockList.addLast(arrayOfBlocks[i][j]);
+				//matchBlockList.addLast(arrayOfBlocks[i][j]);
 				
 			}
 		}
@@ -190,8 +190,8 @@ public class blockHolder {
 			jInput=1;
 			if(match(i, j, iInput, jInput, color))
 			{
-				matchBlockList.addLast(arrayOfBlocks[i][j]);
-				System.out.println(matchCounter);
+				//matchBlockList.addLast(arrayOfBlocks[i][j]);
+				//System.out.println(matchCounter);
 			}
 		}
 		int matchCounterX=matchCounter;
@@ -202,8 +202,8 @@ public class blockHolder {
 			jInput=0;
 			if(match(i, j, iInput, jInput, color))
 			{
-				matchBlockList.addLast(arrayOfBlocks[i][j]);
-				System.out.println(matchCounter);
+				//matchBlockList.addLast(arrayOfBlocks[i][j]);
+				//System.out.println(matchCounter);
 			}
 		}
 		if(i!=ROWS-1)//down
@@ -212,8 +212,8 @@ public class blockHolder {
 			jInput=0;
 			if(match(i, j, iInput, jInput, color))
 			{
-				matchBlockList.addLast(arrayOfBlocks[i][j]);
-				System.out.println(matchCounter);
+			//matchBlockList.addLast(arrayOfBlocks[i][j]);
+				//System.out.println(matchCounter);
 			}
 		}
 		int matchCounterY=matchCounter;
@@ -224,7 +224,7 @@ public class blockHolder {
 		}
 		else
 		{
-		//cleanup
+		 
 		}
 	}
 	
@@ -234,8 +234,9 @@ public class blockHolder {
 		int j;
 		Block hold;
 		
-		for(int z=1;z<=matchBlockList.size(); z++)
+		for(int z=1;z<=matchBlockList.size();)
 		{
+			System.out.println(matchBlockList.size());
  			hold=(Block)matchBlockList.removeFirst();
 			i=hold.getI();
 			j=hold.getJ();
@@ -246,7 +247,55 @@ public class blockHolder {
 			//System.out.println(arrayOfBlocks[i][j].getColor());
 		}
 	}
+	public void drawPane() 
+	{
+		int x = 0;
+		int y = 0;
 
+		JPanel pane=myGame.getPane();
+		pane.removeAll();
+		for (int i = 0; i < 6; i++) 
+		{
+			x += 5;
+			y = 0;
+
+			for (int j = 0; j < 12; j++) 
+			{
+				y += 5;
+				if(arrayOfBlocks[j][i]!=null)
+				{
+					Block b=arrayOfBlocks[j][i];
+					
+					b.setLocation(i * 60 + x, j * 60 + y);
+					
+					b.removeAll();
+					addLabels(b);
+					b.validate();
+					
+					pane.add(b);
+				}
+			}
+		}
+		pane.validate();
+		pane.repaint();
+	
+	}
+	
+	private void addLabels(Block b) {
+		int i=b.getI();
+		int j=b.getJ();
+		JLabel l=new JLabel(j+", "+i);
+		l.setOpaque(true);
+		l.setBackground(b.getColor().getColor());
+		//l.setBackground(Color.WHITE);
+		b.add(l);
+		l=new JLabel(""+b.getColor());
+		l.setOpaque(true);
+		l.setBackground(b.getColor().getColor());
+		b.add(l);
+	}
+
+/*
 	public void drawPane(JPanel pane) 
 	{
 		int x = 0;
@@ -273,5 +322,5 @@ public class blockHolder {
 		pane.repaint();
 		
 	}
-
+*/
 }

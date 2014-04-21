@@ -11,6 +11,7 @@ public abstract class Block extends JPanel implements Cloneable
 		iLoc=i;
 		jLoc=j;
 		setSize(60,60);
+		setOpaque(true);
 	}
 		
 	public abstract boolean match(BlockType color);
