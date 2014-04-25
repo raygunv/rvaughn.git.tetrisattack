@@ -205,10 +205,10 @@ public class blockHolder {
 		int matchCounterX=matchCounter;
 		if(matchCounterX==3)
 		{
-			for(int x=0; x<matchCounterX; x++)
-			{
-				matchBlockList.addLast(arrayOfBlocks[i][j+x*jMatch]);
-			}
+			
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
+				
+			
 		}
 
 		matchCounter=1;
@@ -219,12 +219,7 @@ public class blockHolder {
 			if(match(i, j, iInput, jInput, color))
 			{
 				iMatch=iInput;
-				for(int x=0; x<matchCounter; x++)
-				{	
-					matchBlockList.addLast(arrayOfBlocks[i+x*iMatch][j]);
-				}
-				
-			
+							
 			}
 		}
 		if(i!=ROWS-1)//down
@@ -234,21 +229,18 @@ public class blockHolder {
 			if(match(i, j, iInput, jInput, color))
 			{
 				iMatch=iInput;
-				for(int x=0; x<matchCounter; x++)
-				{	
-					matchBlockList.addLast(arrayOfBlocks[i+x*iMatch][j]);
-				}
+				
 			}
 		}
 		
 		int matchCounterY=matchCounter;
-		//if(matchCounterY==3)
-		//{
-			//for(int x=0; x<matchCounterY; x++)
-			//{	
-			//	matchBlockList.addLast(arrayOfBlocks[i+x*iMatch][j]);
-			//}
-		//}
+		if(matchCounterY==3)
+		{
+				
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
+				
+			
+		}
 		if(matchCounterX>=3||matchCounterY>=3)
 		{
 			collapse();
@@ -264,13 +256,31 @@ public class blockHolder {
 		int i;
 		int j;
 		Block hold;
-		
+		Block hold1;
 		for(int z=1;z<=matchBlockList.size();)
 		{
 			System.out.println(matchBlockList.size());
- 			hold=(Block)matchBlockList.removeFirst();
+			hold=(Block)matchBlockList.removeFirst();
 			i=hold.getI();
 			j=hold.getJ();
+			for(int k=-2; k<=2; k++)
+			{
+				if(i+k>ROWS||i+k<=0||j+k<=0||j+k>COLUMNS)
+				{
+					break;
+				}
+				else if(arrayOfBlocks[i][j].match(arrayOfBlocks[i+k][j].getColor()))
+				{
+					arrayOfBlocks[i+k][j]=null;
+				}
+				else if(arrayOfBlocks[i][j].match(arrayOfBlocks[i][j+k].getColor()))
+				{
+					arrayOfBlocks[i][j+k]=null;
+				}
+	 			
+			}
+			
+			
 			System.out.println(j + ", " + i);
 			
 			System.out.println(hold.getColor());
