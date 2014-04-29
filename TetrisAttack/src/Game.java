@@ -17,8 +17,7 @@ public class Game
 	public void start()
 	{
 		holder=new blockHolder(this);
-		holder.arrayFiller();
-		holder.drawPane();
+		holder.init();
 		myCursor = new Cursor(this);
 		myFrame.addKeyListener(myCursor);
 	}

@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 public class blockHolder {
 
-	Random rn = new Random();
+
 	int matchCounter=1;
 	final int ROWS = 12;
 	final int COLUMNS = 6;
@@ -18,100 +18,18 @@ public class blockHolder {
 	Game myGame;
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
 	
-	public blockHolder(Game game) {
+	public blockHolder(Game game) 
+	{
 		myGame = game;
 		myPane = myGame.getPane();
 		myCursor = myGame.getCursor();
 		myFrame = myGame.getFrame();
 	}
 
-	public void arrayFiller() {
-		
-
-		BlockType color;
-		Block newBlock;
-		int random;
-
-		int startRow = ROWS/2;
-		for (int i = startRow; i < ROWS; i++) {
-
-			for (int j = 0; j < COLUMNS; j++) {
-
-				//random = rn.nextInt(6) + 1;
-				// System.out.println(random);
-
-				do {
-					random = rn.nextInt(6);
-				} while (!canIAdd(i, j, BlockType.values()[random]));
-				
-				color = BlockType.values()[random];
-				switch (color) {
-					case RED:
-						newBlock = new redBlock(i, j);
-						arrayOfBlocks[i][j] = newBlock;
-						break;
-
-					case BLUE:
-						newBlock = new blueBlock(i, j);
-						arrayOfBlocks[i][j] = newBlock;
-						break;
-
-					case CYAN:
-						newBlock = new cyanBlock(i, j);
-						arrayOfBlocks[i][j] = newBlock;
-						break;
-					case PURPLE:
-						newBlock = new purpleBlock(i, j);
-						arrayOfBlocks[i][j] = newBlock;
-						break;
-
-					case YELLOW:
-						newBlock = new yellowBlock(i, j);
-						arrayOfBlocks[i][j] = newBlock;
-						break;
-
-					case GREEN:
-						newBlock = new greenBlock(i, j);
-						arrayOfBlocks[i][j] = newBlock;
-						break;
-						
-					default:
-						System.out.println("Should never get here!!!");
-				}
-			}
-		}
-
-	}
-
-
-	
-	private boolean canIAdd(int i, int j, BlockType color) {
-		
-		matchCounter=1;
-		int iInput;
-		int jInput;
-		if(j!=0)//left
-		{
-			iInput=0;
-			jInput=-1;
-			if(match(i, j, iInput, jInput, color))
-			{
-				return false;
-			}
-		}
-		
-		matchCounter=1;
-		if(i!=0)//up
-		{
-			iInput=-1;
-			jInput=0;
-			if(match(i, j, iInput, jInput, color))
-			{
-				return false;
-			}
-		}
-		return true;
-
+	public void init()
+	{
+		BuildArray.init(arrayOfBlocks);
+		drawPane();
 	}
 	
 	private void relocateBlock(Block block, int i, int j)
@@ -123,7 +41,6 @@ public class blockHolder {
 	
 	public void switchBlocks(int i, int j)
 	{
-
 		Block firstBlock = arrayOfBlocks[i][j];
 		Block secondBlock = arrayOfBlocks[i][j+1];
 		relocateBlock(firstBlock, i, j+1);
@@ -135,7 +52,6 @@ public class blockHolder {
 			disappear(i, j+1);
 		}
 		drawPane();
-		
 	}
 	
 	private boolean match(int i, int j, int iInput, int jInput,  BlockType color)
@@ -155,8 +71,6 @@ public class blockHolder {
 		else 
 		{	
 			matchCounter++;
-			
-			
 			if(matchCounter==3)
 			{
 				return true;
@@ -178,11 +92,22 @@ public class blockHolder {
 		int matchCounterY = matchCounter;
 
 		// remove matched blocks
-		if(matchCounterX>=3||matchCounterY>=3)
+		Block middle=arrayOfBlocks[i][j];
+		if (matchCounterX>=3)
 		{
-			matchBlockList.addLast(arrayOfBlocks[i][j]);
-			collapse();
+			assert(middle!=null);
+			//collapseX(middle);
 		}
+		if (matchCounterY>=3)
+		{
+			assert(middle!=null);
+			collapseY(middle);
+		}
+		//if(matchCounterX>=3||matchCounterY>=3)
+		//{
+		//	matchBlockList.addLast(arrayOfBlocks[i][j]);
+		//	collapse();
+		//}
 	}
 
 	private void disappearX(int i, int j)
@@ -237,7 +162,60 @@ public class blockHolder {
 			}*/
 		}
 	}
+
+	public void collapseY(Block middle)
+	{
+		assert(middle!=null);
+		int i=middle.getI();
+		int j=middle.getJ();
+		BlockType middleColor=middle.getColor(); // PROB#1 fix
+
+		for(int k=-2; k<=2; k++)
+		{
+			// Row boundary condition
+			k=Math.max(0,k);
+			if (i+k>=ROWS-2)
+			{
+				break;
+			}
+			assert(i+k>=0);
+			assert(i+k<ROWS);
+			assert(arrayOfBlocks[i+k][j]!=null);
+
+			if(arrayOfBlocks[i+k][j].match(middleColor)) 
+			{
+				arrayOfBlocks[i+k][j]=null;
+			}
+		}
+	}
 	
+	public void collapseX(Block middle)
+	{
+		assert(middle!=null);
+		int i=middle.getI();
+		int j=middle.getJ();
+		BlockType middleColor=middle.getColor();
+
+		for(int k=-2; k<=2; k++)
+		{
+			// column boundary conditions 
+			// REAGAN - this doesn't work properly
+			if(j+k+1<=0||j+k-1>COLUMNS) 
+			{
+				break;
+			}			
+			assert(j+k>=0);
+			assert(j+k<COLUMNS);
+			assert(arrayOfBlocks[i][j+k]!=null);
+
+			if(arrayOfBlocks[i][j+k].match(middleColor))
+			{
+				arrayOfBlocks[i][j+k]=null;
+			}
+		}
+	}
+
+/*
 	public void collapse()
 	{
 		assert(matchBlockList.size()==1);
@@ -247,7 +225,6 @@ public class blockHolder {
 		int j=middle.getJ();
 		BlockType middleColor=middle.getColor(); // PROB#1 fix
 		assert(arrayOfBlocks[i][j]!=null);
-			
 //		int boundary = 0;
 		
 		// REAGAN - I don't think you can use this one variable "k" to look 
@@ -256,15 +233,15 @@ public class blockHolder {
 		// boundary condition
 		for(int k=-2; k<=2; k++)
 		{
-			/*boundary=i+k;
-			if(boundary==-1) // REAGAN - why doesn't this need to be -2 AND -1?
-			{
-				k++;
-			}
-			if(k==ROWS-1) // REAGAN - why doesn't this need to be ROWS-1 and ROWS-2?
-			{
-				break;
-			}*/
+			//boundary=i+k;
+			//if(boundary==-1) // REAGAN - why doesn't this need to be -2 AND -1?
+			//{
+			//	k++;
+			//}
+			//if(k==ROWS-1) // REAGAN - why doesn't this need to be ROWS-1 and ROWS-2?
+			//{
+			//	break;
+			//}
 			
 			// REAGAN - how about this for checking row boundary conditions?
 			k=Math.max(0,k);
@@ -307,7 +284,7 @@ public class blockHolder {
 			//System.out.println(hold.getColor());
 		}
 	}
-
+*/
 	
 /*	public void collapse() // REAGAN version
 	{
