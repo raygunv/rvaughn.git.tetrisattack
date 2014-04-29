@@ -130,7 +130,7 @@ public class blockHolder {
 		relocateBlock(secondBlock, i, j);
 		
 		disappear(i, j);
-		if(arrayOfBlocks[i][j+1]!=null)
+		if(arrayOfBlocks[i][j+1]!=null||j+1>COLUMNS)
 		{
 			disappear(i, j+1);
 		}
@@ -159,113 +159,192 @@ public class blockHolder {
 			
 			if(matchCounter==3)
 			{
-				
 				return true;
 			}
-			
 		}
 		return match(i, j, iInput, jInput, color);
 	}
 	
 	private void disappear(int i, int j)
 	{
+		// left and right
 		matchCounter=1;
+		disappearX(i,j);
+		int matchCounterX = matchCounter;
+
+		// up and down
+		matchCounter=1;
+		disappearY(i,j);
+		int matchCounterY = matchCounter;
+
+		// remove matched blocks
+		if(matchCounterX>=3||matchCounterY>=3)
+		{
+			matchBlockList.addLast(arrayOfBlocks[i][j]);
+			collapse();
+		}
+	}
+
+	private void disappearX(int i, int j)
+	{
 		int iInput=0;
 		int jInput=0;
-		int jMatch=0;
-		int iMatch=0;
+		//int jMatch=0;
 		BlockType color=arrayOfBlocks[i][j].getColor();
 		if(j!=0)//left
 		{
-			iInput=0;
 			jInput=-1;
-			if(match(i, j, iInput, jInput, color))
+			match(i, j, iInput, jInput, color);
+			/*if(match(i, j, iInput, jInput, color))
 			{
 				jMatch=jInput;
-				//matchBlockList.addLast(arrayOfBlocks[i][j]);
-				//matchBlockList.addLast(arrayOfBlocks[i][j-1]);
-				//matchBlockList.addLast(arrayOfBlocks[i][j-2]);
-				
-			}
-
+			}*/
 		}
 		if(j!=COLUMNS-1)//right
 		{
-			iInput=0;
+			//iInput=0;
 			jInput=1;
-			if(match(i, j, iInput, jInput, color))
+			match(i, j, iInput, jInput, color);
+			/*if(match(i, j, iInput, jInput, color))
 			{
 				jMatch=jInput;
-				//matchBlockList.addLast(arrayOfBlocks[i][j]);
-				//matchBlockList.addLast(arrayOfBlocks[i][j+1]);
-				//matchBlockList.addLast(arrayOfBlocks[i][j+2]);
-				//System.out.println(matchCounter);
-			}
+			}*/
 		}
-		int matchCounterX=matchCounter;
-		if(matchCounterX==3)
-		{
-			
-				matchBlockList.addLast(arrayOfBlocks[i][j]);
-				
-			
-		}
-
-		matchCounter=1;
-		if(i!=0)//up
+	}
+	
+	private void disappearY(int i, int j)
+	{
+		int iInput=0;
+		int jInput=0;
+		//int iMatch=0;
+		BlockType color=arrayOfBlocks[i][j].getColor();
+		if(i!=0) //up
 		{
 			iInput=-1;
-			jInput=0;
-			if(match(i, j, iInput, jInput, color))
+			match(i, j, iInput, jInput, color);
+			/*if(match(i, j, iInput, jInput, color))
 			{
 				iMatch=iInput;
-							
-			}
+			}*/
 		}
-		if(i!=ROWS-1)//down
+		if(i!=ROWS-1) //down
 		{
 			iInput=1;
-			jInput=0;
-			if(match(i, j, iInput, jInput, color))
+			match(i, j, iInput, jInput, color);
+			/*if(match(i, j, iInput, jInput, color))
 			{
 				iMatch=iInput;
-				
-			}
-		}
-		
-		int matchCounterY=matchCounter;
-		if(matchCounterY==3)
-		{
-				
-				matchBlockList.addLast(arrayOfBlocks[i][j]);
-				
-			
-		}
-		if(matchCounterX>=3||matchCounterY>=3)
-		{
-			collapse();
-		}
-		else
-		{
-		 
+			}*/
 		}
 	}
 	
 	public void collapse()
 	{
+		assert(matchBlockList.size()==1);
+		Block middle=(Block)matchBlockList.removeFirst();
+		assert(middle!=null);
+		int i=middle.getI();
+		int j=middle.getJ();
+		BlockType middleColor=middle.getColor(); // PROB#1 fix
+		assert(arrayOfBlocks[i][j]!=null);
+			
+//		int boundary = 0;
+		
+		// REAGAN - I don't think you can use this one variable "k" to look 
+		// in both the x-dir and y-dir all at the same time, can you?
+		// Especially since you modify k right here to solve the row
+		// boundary condition
+		for(int k=-2; k<=2; k++)
+		{
+			/*boundary=i+k;
+			if(boundary==-1) // REAGAN - why doesn't this need to be -2 AND -1?
+			{
+				k++;
+			}
+			if(k==ROWS-1) // REAGAN - why doesn't this need to be ROWS-1 and ROWS-2?
+			{
+				break;
+			}*/
+			
+			// REAGAN - how about this for checking row boundary conditions?
+			k=Math.max(0,k);
+			if (i+k>=ROWS-2)
+			{
+				break;
+			}
+			assert(i+k>=0);
+			assert(i+k<ROWS);
+			assert(arrayOfBlocks[i+k][j]!=null);
+			
+			// REAGAN - now you have to check column boundary conditions before proceeding
+			// REAGAN - I moved that code here, but I don't think it works
+			//if(i+k-1>=ROWS||i+k+1<=0||j+k+1<=0||j+k-1>COLUMNS) 
+			if(j+k+1<=0||j+k-1>COLUMNS) // REAGAN - Row boundary already handled
+			{
+				break;
+			}			
+			assert(j+k>=0);
+			assert(j+k<COLUMNS);
+			assert(arrayOfBlocks[i][j+k]!=null);
+	
+			// REAGAN - PROB#1
+			// REAGAN - you have already "deleted" arrayOfBlocks[i][j], but you are still using it
+			// assert(arrayOfBlocks[i][j]!=null);
+			//else if(arrayOfBlocks[i][j].match(arrayOfBlocks[i+k][j].getColor())) PROB#1
+
+			//System.out.println(arrayOfBlocks[i+k][j].getColor());
+			//System.out.println(arrayOfBlocks[i+k][j].getI()+", "+arrayOfBlocks[i+k][j].getJ());
+			if(arrayOfBlocks[i+k][j].match(middleColor)) // PROB#1 fix
+			{
+				arrayOfBlocks[i+k][j]=null;
+			}
+			//else if(arrayOfBlocks[i][j].match(arrayOfBlocks[i][j+k].getColor())) PROB#1
+			else if(arrayOfBlocks[i][j+k].match(middleColor)) // PROB#1 fix
+			{
+				arrayOfBlocks[i][j+k]=null;
+			}
+			//System.out.println(j + ", " + i);
+			//System.out.println(hold.getColor());
+		}
+	}
+
+	
+/*	public void collapse() // REAGAN version
+	{
 		int i;
 		int j;
+		int boundary;
 		Block hold;
-		Block hold1;
-		for(int z=1;z<=matchBlockList.size();)
-		{
-			System.out.println(matchBlockList.size());
+//		Block hold1;
+		assert(matchBlockList.size()==1);
+//		for(int z=1;z<=matchBlockList.size();)
+//		{
+//			System.out.println(matchBlockList.size());
 			hold=(Block)matchBlockList.removeFirst();
+			assert(hold!=null);
 			i=hold.getI();
 			j=hold.getJ();
+			
 			for(int k=-2; k<=2; k++)
 			{
-				if(i+k>ROWS||i+k<=0||j+k<=0||j+k>COLUMNS)
+				boundary=i+k;
+				if(boundary==-1) // REAGAN - why do this?
+				{
+					k++;
+				}
+				if(boundary==ROWS-1)
+				{
+					break;
+				}
+					
+//				System.out.println(k);
+				assert(i+k>=0);
+				assert(i+k<ROWS);
+				assert(arrayOfBlocks[i+k][j]!=null);
+				assert(arrayOfBlocks[i][j]!=null);  // REAGAN - seems that this block already gone
+				System.out.println(arrayOfBlocks[i+k][j].getColor());
+				System.out.println(arrayOfBlocks[i+k][j].getI()+", "+arrayOfBlocks[i+k][j].getJ());
+				if(i+k-1>=ROWS||i+k+1<=0||j+k+1<=0||j+k-1>COLUMNS)
 				{
 					break;
 				}
@@ -278,17 +357,16 @@ public class blockHolder {
 					arrayOfBlocks[i][j+k]=null;
 				}
 	 			
-			}
-			
-			
+	//		}
 			System.out.println(j + ", " + i);
-			
 			System.out.println(hold.getColor());
-			arrayOfBlocks[i][j]=null;
+			//arrayOfBlocks[i][j]=null;
 			//new noneBlock(i, j);
 			//System.out.println(arrayOfBlocks[i][j].getColor());
 		}
 	}
+*/
+	
 	public void drawPane() 
 	{
 		int x = 0;
@@ -337,7 +415,72 @@ public class blockHolder {
 		b.add(l);
 	}
 
-/*
+	/*private void disappear(int i, int j)
+	{
+		matchCounter=1;
+		int iInput=0;
+		int jInput=0;
+		int jMatch=0;
+		int iMatch=0;
+		BlockType color=arrayOfBlocks[i][j].getColor();
+		if(j!=0)//left
+		{
+			iInput=0;
+			jInput=-1;
+			if(match(i, j, iInput, jInput, color))
+			{
+				jMatch=jInput;
+			}
+
+		}
+		if(j!=COLUMNS-1)//right
+		{
+			iInput=0;
+			jInput=1;
+			if(match(i, j, iInput, jInput, color))
+			{
+				jMatch=jInput;
+			}
+		}
+		int matchCounterX=matchCounter;
+		if(matchCounterX==3)
+		{
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
+		}
+
+		matchCounter=1;
+		if(i!=0) //up
+		{
+			iInput=-1;
+			jInput=0;
+			if(match(i, j, iInput, jInput, color))
+			{
+				iMatch=iInput;
+							
+			}
+		}
+		if(i!=ROWS-1) //down
+		{
+			iInput=1;
+			jInput=0;
+			if(match(i, j, iInput, jInput, color))
+			{
+				iMatch=iInput;
+			}
+		}
+		
+		int matchCounterY=matchCounter;
+		if(matchCounterY==3)
+		{
+				matchBlockList.addLast(arrayOfBlocks[i][j]);
+		}
+		if(matchCounterX>=3||matchCounterY>=3)
+		{
+			collapse();
+		}
+	}*/
+	
+	/*
 	public void drawPane(JPanel pane) 
 	{
 		int x = 0;
