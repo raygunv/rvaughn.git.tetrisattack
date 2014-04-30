@@ -19,13 +19,14 @@ public class Game
 		holder=new blockHolder(this);
 		holder.arrayFiller();
 		holder.drawPane();
+		//holder.setLabels(false);
 		myCursor = new Cursor(this);
 		myFrame.addKeyListener(myCursor);
 	}
 	
 	public void switchBlocks(int i, int j)
 	{
-		holder.switchBlocks(i, j);
+		holder.switchBlocks(i, j, i, j+1);
 		holder.dissolveBlocks(i, j);
 	}
 	
@@ -46,6 +47,6 @@ public class Game
 	public void drawCursor(JPanel cursor)
 	{
 		myPane.add(cursor);
-	
 	}
+	
 }
