@@ -10,6 +10,8 @@ public class blockHolder {
 	int matchCounter = 1;
 	final int ROWS = 12;
 	final int COLUMNS = 6;
+	int colorMatchX=0;
+	int colorMatchY=0;
 	LinkedList<Block> matchBlockList = new LinkedList<Block>();
 	JPanel myPane;
 	JPanel myCursor;
@@ -99,11 +101,38 @@ public class blockHolder {
 		}
 		return true;
 	}
+	public void fall()
+	{ 
+		for(int x=0; x<6;x++)
+		{
+			for (int i = 5; i >=0; i--)
+			{
+				for (int j = 10; j >= 1; j--)
+				{
+					if(arrayOfBlocks[j+1][i]==null)
+					{
+						Block firstBlock = arrayOfBlocks[j][i];
+						Block secondBlock = arrayOfBlocks[j+1][i];
+						relocateBlock(firstBlock, j+1, i);
+						relocateBlock(secondBlock, j, i);
+					}
+				}
+			}
+		}
+		
+	}
 
 	private void relocateBlock(Block block, int i, int j) {
-		block.iLoc = i;
-		block.jLoc = j;
-		arrayOfBlocks[i][j] = block;
+		if(block!=null)
+		{
+			block.iLoc = i;
+			block.jLoc = j;
+			arrayOfBlocks[i][j] = block;
+		}
+		else
+		{
+			arrayOfBlocks[i][j]=null;
+		}
 	}
 
 	public void switchBlocks(int i, int j) {
@@ -111,11 +140,12 @@ public class blockHolder {
 		Block secondBlock = arrayOfBlocks[i][j + 1];
 		relocateBlock(firstBlock, i, j + 1);
 		relocateBlock(secondBlock, i, j);
-
+		fall();
 		disappear(i, j);
 		if (arrayOfBlocks[i][j + 1] != null) {
 			disappear(i, j + 1);
 		}
+		
 		drawPane();
 	}
 
@@ -138,22 +168,13 @@ public class blockHolder {
 		return match(i, j, iInput, jInput, color);
 	}
 
-	/*
-	 * MOMS private void disappear(int i, int j) { // left and right
-	 * matchCounter=1; disappearX(i,j); int matchCounterX = matchCounter;
-	 * 
-	 * // up and down matchCounter=1; disappearY(i,j); int matchCounterY =
-	 * matchCounter;
-	 * 
-	 * // remove matched blocks Block middle=arrayOfBlocks[i][j]; if
-	 * (matchCounterX>=3) { assert(middle!=null); //collapseX(middle); } if
-	 * (matchCounterY>=3) { assert(middle!=null); collapseY(middle); }
-	 * //if(matchCounterX>=3||matchCounterY>=3) //{ //
-	 * matchBlockList.addLast(arrayOfBlocks[i][j]); // collapse(); //} }
-	 */
 
 	private void disappear(int i, int j) {
 		// left and right
+		if(arrayOfBlocks[i][j]==null)
+		{
+			return;
+		}
 		matchCounter = 1;
 		disappearX(i, j);
 		int matchCounterX = matchCounter;
@@ -236,10 +257,10 @@ public class blockHolder {
 				arrayOfBlocks[i + k][j] = null;
 			}
 		}
+		fall();
 	}
 
 	public void collapseX() {
-
 		Block middle = (Block) matchBlockList.removeFirst();
 		int i = middle.getI();
 		int j = middle.getJ();
@@ -253,8 +274,9 @@ public class blockHolder {
 				break;
 			}
 			if (j+k==COLUMNS-1) {
-				if (arrayOfBlocks[i][j+k].match(middleColor)) // PROB#1 fix
+				if (arrayOfBlocks[i][j+k].match(middleColor))
 				{
+					colorMatchX++;
 					arrayOfBlocks[i][j+k] = null;
 				}
 				break;
@@ -264,127 +286,15 @@ public class blockHolder {
 			assert (arrayOfBlocks[i][j + k] != null);
 
 			if (arrayOfBlocks[i][j + k].match(middleColor)) {
+				colorMatchX++;
 				arrayOfBlocks[i][j + k] = null;
 			}
 		}
+		fall();
 	}
+	
 
-		/*public void collapse() {
-		assert (matchBlockList.size() == 1);
-		Block middle = (Block) matchBlockList.removeFirst();
-		assert (middle != null);
-		int i = middle.getI();
-		int j = middle.getJ();
-		BlockType middleColor = middle.getColor(); // PROB#1 fix
-		assert (arrayOfBlocks[i][j] != null);
-		collapseY();
-		if(arrayOfBlocks[i][j] != null)
-		{
-			collapseX();
-		}
-		// int boundary = 0;
 
-		// REAGAN - I don't think you can use this one variable "k" to look
-		// in both the x-dir and y-dir all at the same time, can you?
-		// Especially since you modify k right here to solve the row
-		// boundary condition
-		/*for (int k = -2; k <= 2; k++) {
-			// boundary=i+k;
-			// if(boundary==-1) // REAGAN - why doesn't this need to be -2 AND
-			// -1?
-			{
-				k++;
-			}
-			if (k == ROWS - 1) // REAGAN - why doesn't this need to be ROWS-1
-								// and ROWS-2?
-			{
-				break;
-			}
-
-			// REAGAN - how about this for checking row boundary conditions?
-			if (arrayOfBlocks[i + k][j] == null) {
-				k++;
-			}
-			System.out.println(k);
-			
-			if (i + k == 11) {
-				if (arrayOfBlocks[i + k][j].match(middleColor)) // PROB#1 fix
-				{
-					arrayOfBlocks[i + k][j] = null;
-				}
-				break;
-			}
-			assert (i + k >= 0);
-			assert (i + k < ROWS);
-			assert (arrayOfBlocks[i + k][j] != null);
-
-			// REAGAN - now you have to check column boundary conditions before
-			// proceeding
-			// REAGAN - I moved that code here, but I don't think it works
-			// if(i+k-1>=ROWS||i+k+1<=0||j+k+1<=0||j+k-1>COLUMNS)
-			if (j + k + 1 <= 0 || j + k - 1 > COLUMNS) // REAGAN - Row boundary
-														// already handled
-			{
-				break;
-			}
-			assert (j + k >= 0);
-			assert (j + k < COLUMNS);
-			assert (arrayOfBlocks[i][j + k] != null);
-
-			// REAGAN - PROB#1
-			// REAGAN - you have already "deleted" arrayOfBlocks[i][j], but you
-			// are still using it
-			// assert(arrayOfBlocks[i][j]!=null);
-			// else
-			// if(arrayOfBlocks[i][j].match(arrayOfBlocks[i+k][j].getColor()))
-			// PROB#1
-
-			System.out.println(arrayOfBlocks[i + k][j].getColor());
-			System.out.println(middleColor);
-			if (arrayOfBlocks[i + k][j].match(middleColor)) // PROB#1 fix
-			{
-				arrayOfBlocks[i + k][j] = null;
-			}
-			// else
-			// if(arrayOfBlocks[i][j].match(arrayOfBlocks[i][j+k].getColor()))
-			// PROB#1
-			else if (arrayOfBlocks[i][j + k].match(middleColor)) // PROB#1 fix
-			{
-				arrayOfBlocks[i][j + k] = null;
-			}
-			// System.out.println(j + ", " + i);
-			// System.out.println(hold.getColor());
-		}
-	}*/
-
-	/*
-	 * public void collapse() // REAGAN version { int i; int j; int boundary;
-	 * Block hold; // Block hold1; assert(matchBlockList.size()==1); // for(int
-	 * z=1;z<=matchBlockList.size();) // { //
-	 * System.out.println(matchBlockList.size());
-	 * hold=(Block)matchBlockList.removeFirst(); assert(hold!=null);
-	 * i=hold.getI(); j=hold.getJ();
-	 * 
-	 * for(int k=-2; k<=2; k++) { boundary=i+k; if(boundary==-1) // REAGAN - why
-	 * do this? { k++; } if(boundary==ROWS-1) { break; }
-	 * 
-	 * // System.out.println(k); assert(i+k>=0); assert(i+k<ROWS);
-	 * assert(arrayOfBlocks[i+k][j]!=null); assert(arrayOfBlocks[i][j]!=null);
-	 * // REAGAN - seems that this block already gone
-	 * System.out.println(arrayOfBlocks[i+k][j].getColor());
-	 * System.out.println(arrayOfBlocks
-	 * [i+k][j].getI()+", "+arrayOfBlocks[i+k][j].getJ());
-	 * if(i+k-1>=ROWS||i+k+1<=0||j+k+1<=0||j+k-1>COLUMNS) { break; } else
-	 * if(arrayOfBlocks[i][j].match(arrayOfBlocks[i+k][j].getColor())) {
-	 * arrayOfBlocks[i+k][j]=null; } else
-	 * if(arrayOfBlocks[i][j].match(arrayOfBlocks[i][j+k].getColor())) {
-	 * arrayOfBlocks[i][j+k]=null; }
-	 * 
-	 * // } System.out.println(j + ", " + i);
-	 * System.out.println(hold.getColor()); //arrayOfBlocks[i][j]=null; //new
-	 * noneBlock(i, j); //System.out.println(arrayOfBlocks[i][j].getColor()); }
-	 * }
-	 */
 
 	public void drawPane() {
 		int x = 0;
@@ -413,7 +323,6 @@ public class blockHolder {
 		}
 		pane.validate();
 		pane.repaint();
-
 	}
 
 	private void addLabels(Block b) {
@@ -430,39 +339,4 @@ public class blockHolder {
 		b.add(l);
 	}
 
-	/*
-	 * private void disappear(int i, int j) { matchCounter=1; int iInput=0; int
-	 * jInput=0; int jMatch=0; int iMatch=0; BlockType
-	 * color=arrayOfBlocks[i][j].getColor(); if(j!=0)//left { iInput=0;
-	 * jInput=-1; if(match(i, j, iInput, jInput, color)) { jMatch=jInput; }
-	 * 
-	 * } if(j!=COLUMNS-1)//right { iInput=0; jInput=1; if(match(i, j, iInput,
-	 * jInput, color)) { jMatch=jInput; } } int matchCounterX=matchCounter;
-	 * if(matchCounterX==3) { matchBlockList.addLast(arrayOfBlocks[i][j]); }
-	 * 
-	 * matchCounter=1; if(i!=0) //up { iInput=-1; jInput=0; if(match(i, j,
-	 * iInput, jInput, color)) { iMatch=iInput;
-	 * 
-	 * } } if(i!=ROWS-1) //down { iInput=1; jInput=0; if(match(i, j, iInput,
-	 * jInput, color)) { iMatch=iInput; } }
-	 * 
-	 * int matchCounterY=matchCounter; if(matchCounterY==3) {
-	 * matchBlockList.addLast(arrayOfBlocks[i][j]); }
-	 * if(matchCounterX>=3||matchCounterY>=3) { collapse(); } }
-	 */
-
-	/*
-	 * public void drawPane(JPanel pane) { int x = 0; int y = 0;
-	 * 
-	 * pane.removeAll();
-	 * 
-	 * for (int i = 0; i < 6; i++) { x += 5; y = 0;
-	 * 
-	 * for (int j = 0; j < 12; j++) { y += 5; if(arrayOfBlocks[j][i]!=null) {
-	 * pane.add(arrayOfBlocks[j][i]); arrayOfBlocks[j][i].setLocation(i * 60 +
-	 * x, j * 60 + y); arrayOfBlocks[j][i].add(new JLabel(i+", "+j)); } } }
-	 * pane.validate(); pane.repaint();
-	 * 
-	 * }
-	 */
 }
