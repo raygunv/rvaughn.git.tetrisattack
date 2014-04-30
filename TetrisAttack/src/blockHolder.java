@@ -18,7 +18,6 @@ public class blockHolder {
 	Frame myFrame;
 	Game myGame;
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
-	boolean fall=false;
 
 	public blockHolder(Game game) {
 		myGame = game;
@@ -102,8 +101,9 @@ public class blockHolder {
 		}
 		return true;
 	}
-	public void fall()
+	private boolean fall()
 	{ 
+		boolean falling=false;
 		for(int x=0; x<6;x++)
 		{
 			for (int i = 5; i >=0; i--)
@@ -116,13 +116,12 @@ public class blockHolder {
 						Block secondBlock = arrayOfBlocks[j+1][i];
 						relocateBlock(firstBlock, j+1, i);
 						relocateBlock(secondBlock, j, i);
-						fall=true;
+						falling=true;
 					}
 				}
 			}
-			
 		}
-		
+		return falling;
 	}
 
 	private void relocateBlock(Block block, int i, int j) {
@@ -138,6 +137,51 @@ public class blockHolder {
 		}
 	}
 
+	public void switchBlocks(int i, int j)
+	{
+		Block firstBlock = arrayOfBlocks[i][j];
+		Block secondBlock = arrayOfBlocks[i][j + 1];
+		relocateBlock(firstBlock, i, j + 1);
+		relocateBlock(secondBlock, i, j);
+	}
+	
+	public void dissolveBlocks(int i, int j)
+	{
+		fall();
+		for (j = 0; j < 5; j++) {
+			
+
+			for ( i = 0; i < 12; i++) {
+				disappear(i, j);
+				if (arrayOfBlocks[i][j + 1] != null) {
+					disappear(i, j + 1);
+				}
+				
+				//drawPane();
+			}
+		}
+		drawPane();
+	}
+	
+	/* MOM
+	public void dissolveBlocks(int i, int j)
+	{
+		if (fall())
+		{
+			for (i=0; i < ROWS; i++)
+			{
+				disappear(i, j);
+				if (arrayOfBlocks[i][j + 1] != null) 
+				{
+					disappear(i, j + 1);
+				}
+			}
+		}
+		drawPane();
+	}*/
+	
+	
+	/* OLD WAY
 	public void switchBlocks(int i, int j) {
 		Block firstBlock = arrayOfBlocks[i][j];
 		Block secondBlock = arrayOfBlocks[i][j + 1];
@@ -157,8 +201,9 @@ public class blockHolder {
 			}
 		}
 		
-	}
+	}*/
 
+	
 	private boolean match(int i, int j, int iInput, int jInput, BlockType color) {
 		assert (i >= 0 && i <= ROWS);
 		assert (j >= 0 && j <= COLUMNS);

@@ -26,6 +26,7 @@ public class Game
 	public void switchBlocks(int i, int j)
 	{
 		holder.switchBlocks(i, j);
+		holder.dissolveBlocks(i, j);
 	}
 	
 	public JPanel getPane()
