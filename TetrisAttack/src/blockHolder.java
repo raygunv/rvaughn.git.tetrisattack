@@ -18,6 +18,7 @@ public class blockHolder {
 	Frame myFrame;
 	Game myGame;
 	Block arrayOfBlocks[][] = new Block[ROWS][COLUMNS];
+	boolean fall=false;
 
 	public blockHolder(Game game) {
 		myGame = game;
@@ -115,9 +116,11 @@ public class blockHolder {
 						Block secondBlock = arrayOfBlocks[j+1][i];
 						relocateBlock(firstBlock, j+1, i);
 						relocateBlock(secondBlock, j, i);
+						fall=true;
 					}
 				}
 			}
+			
 		}
 		
 	}
@@ -141,12 +144,19 @@ public class blockHolder {
 		relocateBlock(firstBlock, i, j + 1);
 		relocateBlock(secondBlock, i, j);
 		fall();
-		disappear(i, j);
-		if (arrayOfBlocks[i][j + 1] != null) {
-			disappear(i, j + 1);
+		for (j = 0; j < 5; j++) {
+			
+
+			for ( i = 0; i < 12; i++) {
+				disappear(i, j);
+				if (arrayOfBlocks[i][j + 1] != null) {
+					disappear(i, j + 1);
+				}
+				
+				drawPane();
+			}
 		}
 		
-		drawPane();
 	}
 
 	private boolean match(int i, int j, int iInput, int jInput, BlockType color) {
@@ -187,10 +197,12 @@ public class blockHolder {
 		if (matchCounterX >= 3) {
 			matchBlockList.addLast(arrayOfBlocks[i][j]);
 			collapseX();
+			fall();
 		}
 		if (matchCounterY >= 3&&arrayOfBlocks[i][j]!=null){
 			matchBlockList.addLast(arrayOfBlocks[i][j]);
 			collapseY();
+			fall();
 		}
 	}
 
@@ -257,7 +269,7 @@ public class blockHolder {
 				arrayOfBlocks[i + k][j] = null;
 			}
 		}
-		fall();
+	
 	}
 
 	public void collapseX() {
@@ -269,9 +281,9 @@ public class blockHolder {
 		
 		for (int k = -2; k <= 2; k++) {
 			System.out.println(k);
-			if (j+k==-1||j+k==-2) {
+			if (j+k==-1||j+k==-2||arrayOfBlocks[i][j+k]== null) {
 				k++;
-				break;
+				continue;
 			}
 			if (j+k==COLUMNS-1) {
 				if (arrayOfBlocks[i][j+k].match(middleColor))
@@ -290,7 +302,7 @@ public class blockHolder {
 				arrayOfBlocks[i][j + k] = null;
 			}
 		}
-		fall();
+		
 	}
 	
 
