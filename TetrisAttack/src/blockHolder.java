@@ -153,68 +153,27 @@ public class blockHolder {
 	
 	public void dissolveBlocks(int i, int j)
 	{
-		fall();
-		for (j = 0; j < 5; j++) 
-		{
-			for ( i = 0; i < 12; i++) 
-			{
-				disappear(i, j);
-				if (arrayOfBlocks[i][j + 1] != null) 
-				{
-					disappear(i, j + 1);
-				}
-			}
-		}
-		drawPane();
-	}
-	
-	// MOM
-	public void dissolveBlocksMom(int i, int j)
-	{
-		// first check the two blocks just switched
 		disappear(i, j);
 		if (arrayOfBlocks[i][j + 1] != null) 
 		{
 			disappear(i, j + 1);
 		}
-		// second, see if anything needs to fall
-		if (fall())
+		if(fall())//4 in a row doesn't work
 		{
-			// after a fall, re-check the entire grid
-			for (int x = 0; x < 12; x++) 
-			{		
-				for (int y = 0; y < 5; y++) 
+			for (j = 0; j < 6; j++) 
+			{
+				for ( i = 0; i < 12; i++) 
 				{
-					disappear(x, y); // is this enough?
+					disappear(i, j);
+				//if (arrayOfBlocks[i][j + 1] != null) 
+				//{
+				//	disappear(i, j + 1);
+				//}
 				}
 			}
 		}
 		drawPane();
 	}
-	
-	
-	/* OLD WAY
-	public void switchBlocks(int i, int j) {
-		Block firstBlock = arrayOfBlocks[i][j];
-		Block secondBlock = arrayOfBlocks[i][j + 1];
-		relocateBlock(firstBlock, i, j + 1);
-		relocateBlock(secondBlock, i, j);
-		fall();
-		for (j = 0; j < 5; j++) {
-			
-
-			for ( i = 0; i < 12; i++) {
-				disappear(i, j);
-				if (arrayOfBlocks[i][j + 1] != null) {
-					disappear(i, j + 1);
-				}
-				
-				drawPane();
-			}
-		}
-		
-	}*/
-
 	
 	private boolean match(int i, int j, int iInput, int jInput, BlockType color) {
 		assert (i >= 0 && i <= ROWS);
@@ -234,7 +193,6 @@ public class blockHolder {
 		}
 		return match(i, j, iInput, jInput, color);
 	}
-
 
 	private void disappear(int i, int j) {
 		// left and right
@@ -307,7 +265,6 @@ public class blockHolder {
 		for (int k = -2; k <= 2; k++) {
 			// Row boundary condition
 			if (i+k==-1||i+k==-2||arrayOfBlocks[i + k][j]== null) {
-				//k++;  // FIXFIXFIX
 				System.out.println("Row boundary: i="+i+"  k="+k);
 				continue;
 			}
@@ -322,26 +279,26 @@ public class blockHolder {
 			assert (i + k >= 0);
 			assert (i + k < ROWS);
 			assert (arrayOfBlocks[i + k][j] != null);
-			/*if(k==-2)
+			if(k==-2)
 			{
 				System.out.println("here");
 				if(arrayOfBlocks[i+k][j].match(arrayOfBlocks[i+k+1][j].getColor())&&arrayOfBlocks[i+k][j].match(middleColor))
 				{
+					System.out.println("here");
 					arrayOfBlocks[i + k][j] = null;
 				}
 				
-			}*/
-			/*else if(k==2)
-			{
-				System.out.println("here2");
-				if(arrayOfBlocks[i+k-1][j]!=null&&arrayOfBlocks[i+k][j].match(arrayOfBlocks[i+k-1][j].getColor())&&arrayOfBlocks[i+k][j].match(middleColor))
-				{
-					arrayOfBlocks[i + k][j] = null;
-				}
 			}
-			
-			*/
-			if (arrayOfBlocks[i + k][j].match(middleColor)) {
+			//else if(k==2&&arrayOfBlocks[i+k-1][j]!=null)
+			//{
+			//	System.out.println("here2");
+			//	if(arrayOfBlocks[i+k-1][j]!=null)
+			//	{
+			//		arrayOfBlocks[i+k][j]=null;
+			//	}
+			//df}
+		
+			else if (arrayOfBlocks[i + k][j]!=null&&arrayOfBlocks[i + k][j].match(middleColor)) {
 				arrayOfBlocks[i + k][j] = null;
 			}
 		}
