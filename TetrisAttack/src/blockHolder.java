@@ -21,10 +21,10 @@ public class blockHolder {
 		
 	boolean labelsOnOff=true;
 	
-	public void setLabels(boolean onOff)
-	{
-		labelsOnOff=onOff;
-	}
+	//private void setLabels(boolean onOff)
+	//{
+	//	labelsOnOff=onOff;
+	//}
 	
 	public blockHolder(Game game) {
 		myGame = game;
@@ -33,16 +33,32 @@ public class blockHolder {
 		myFrame = myGame.getFrame();
 	}
 
-	public void arrayFiller() {
+	public void init() 
+	{
+		for (int i = 6; i < ROWS; i++) {
+			for (int j = 0; j < COLUMNS; j++) {
+				arrayFiller(i,j);
+				
+			}
+		}	
+	}
+	
+	public void switchBlocks(int i, int j, int i2, int j2)
+	{
+		Block firstBlock = arrayOfBlocks[i][j];
+		Block secondBlock = arrayOfBlocks[i2][j2];
+		relocateBlock(firstBlock, i2, j2);
+		relocateBlock(secondBlock, i, j);
+	}
+	
+	private void arrayFiller(int i, int j) {
 		Random rn = new Random();
 		BlockType color;
 		Block newBlock;
 		int random;
 
 		int startRow = ROWS / 2;
-		for (int i = startRow; i < ROWS; i++) {
-
-			for (int j = 0; j < COLUMNS; j++) {
+		
 				do {
 					random = rn.nextInt(6);
 				} while (!canIAdd(i, j, BlockType.values()[random]));
@@ -82,9 +98,35 @@ public class blockHolder {
 					System.out.println("Should never get here!!!");
 				}
 			}
+	
+	public void addRow()
+	{
+		int i=11;
+		
+		rise();	
+		for(int j=0; j<COLUMNS; j++)
+		{
+			arrayFiller(i,j);
+		}
+		drawPane();
+	}
+	
+	private void rise()
+	{
+		for (int i = 0; i <6; i++)
+		{
+			for (int j = 1; j <12; j++)
+			{
+				if(j==12)
+				{
+					
+					break;
+				}
+				switchBlocks(j, i, j-1, i);
+			}
 		}
 	}
-
+	
 	private boolean canIAdd(int i, int j, BlockType color) {
 		matchCounter = 1;
 		int iInput;
@@ -142,15 +184,7 @@ public class blockHolder {
 			arrayOfBlocks[i][j]=null;
 		}
 	}
-	
-	public void switchBlocks(int i, int j, int i2, int j2)
-	{
-		Block firstBlock = arrayOfBlocks[i][j];
-		Block secondBlock = arrayOfBlocks[i2][j2];
-		relocateBlock(firstBlock, i2, j2);
-		relocateBlock(secondBlock, i, j);
-	}
-	
+		
 	public void dissolveBlocks(int i, int j)
 	{
 		disappear(i, j);
@@ -158,17 +192,13 @@ public class blockHolder {
 		{
 			disappear(i, j + 1);
 		}
-		if(fall())//4 in a row doesn't work
+		if(fall())
 		{
 			for (j = 0; j < 6; j++) 
 			{
 				for ( i = 0; i < 12; i++) 
 				{
 					disappear(i, j);
-				//if (arrayOfBlocks[i][j + 1] != null) 
-				//{
-				//	disappear(i, j + 1);
-				//}
 				}
 			}
 		}
@@ -255,7 +285,7 @@ public class blockHolder {
 		}
 	}
 
-	public void collapseY() {
+	private void collapseY() {
 		Block middle = (Block) matchBlockList.removeFirst();
 		assert (middle != null);
 		int i = middle.getI();
@@ -304,7 +334,7 @@ public class blockHolder {
 		}
 	}
 
-	public void collapseX() {
+	private void collapseX() {
 		Block middle = (Block) matchBlockList.removeFirst();
 		int i = middle.getI();
 		int j = middle.getJ();

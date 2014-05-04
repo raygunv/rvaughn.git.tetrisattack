@@ -68,6 +68,10 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 				xCur++;
 			}
 		}
+		if(k.getKeyChar()=='p')
+		{
+			myGame.addRow();
+		}
 		
 		setLocation(yCur*60 + yCur*5+1, xCur*60 + xCur*5+1);
 		myGame.drawCursor(this);

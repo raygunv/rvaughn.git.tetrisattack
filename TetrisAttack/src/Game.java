@@ -17,7 +17,7 @@ public class Game
 	public void start()
 	{
 		holder=new blockHolder(this);
-		holder.arrayFiller();
+		holder.init();
 		holder.drawPane();
 		//holder.setLabels(false);
 		myCursor = new Cursor(this);
@@ -30,7 +30,10 @@ public class Game
 		holder.dissolveBlocks(i, j);
 		//holder.dissolveBlocksMom(i, j);
 	}
-	
+	public void addRow()
+	{
+		holder.addRow();
+	}
 	public JPanel getPane()
 	{
 		return myPane;
