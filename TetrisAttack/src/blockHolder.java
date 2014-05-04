@@ -129,7 +129,8 @@ public class blockHolder {
 		return falling;
 	}
 
-	private void relocateBlock(Block block, int i, int j) {
+	private void relocateBlock(Block block, int i, int j) 
+	{
 		if(block!=null)
 		{
 			block.iLoc = i;
@@ -167,22 +168,29 @@ public class blockHolder {
 		drawPane();
 	}
 	
-	/* MOM
-	public void dissolveBlocks(int i, int j)
+	// MOM
+	public void dissolveBlocksMom(int i, int j)
 	{
+		// first check the two blocks just switched
+		disappear(i, j);
+		if (arrayOfBlocks[i][j + 1] != null) 
+		{
+			disappear(i, j + 1);
+		}
+		// second, see if anything needs to fall
 		if (fall())
 		{
-			for (i=0; i < ROWS; i++)
-			{
-				disappear(i, j);
-				if (arrayOfBlocks[i][j + 1] != null) 
+			// after a fall, re-check the entire grid
+			for (int x = 0; x < 12; x++) 
+			{		
+				for (int y = 0; y < 5; y++) 
 				{
-					disappear(i, j + 1);
+					disappear(x, y); // is this enough?
 				}
 			}
 		}
 		drawPane();
-	}*/
+	}
 	
 	
 	/* OLD WAY
@@ -299,12 +307,11 @@ public class blockHolder {
 		for (int k = -2; k <= 2; k++) {
 			// Row boundary condition
 			if (i+k==-1||i+k==-2||arrayOfBlocks[i + k][j]== null) {
-				k++;
-				System.out.println("dumb");
+				//k++;  // FIXFIXFIX
+				System.out.println("Row boundary: i="+i+"  k="+k);
 				continue;
-				
 			}
-			System.out.println("k is "+k);
+			System.out.println("i is "+i+"  k is "+k);
 			if (i + k == ROWS-1) {
 				if (arrayOfBlocks[i + k][j].match(middleColor))
 				{
@@ -338,7 +345,6 @@ public class blockHolder {
 				arrayOfBlocks[i + k][j] = null;
 			}
 		}
-	
 	}
 
 	public void collapseX() {
@@ -374,9 +380,6 @@ public class blockHolder {
 		
 	}
 	
-
-
-
 	public void drawPane() {
 		int x = 0;
 		int y = 0;
