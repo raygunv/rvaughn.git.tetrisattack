@@ -102,6 +102,7 @@ public class blockHolder {
 	public void addRow()
 	{
 		int i=11;
+		int k=0;
 		
 		rise();	
 		for(int j=0; j<COLUMNS; j++)
@@ -109,6 +110,13 @@ public class blockHolder {
 			arrayFiller(i,j);
 		}
 		drawPane();
+		for(int j=0; j<COLUMNS; j++)
+		{
+			if(arrayOfBlocks[k][j]!=null)
+			{
+				myGame.stop();
+			}
+		}
 	}
 	
 	private void rise()
@@ -117,11 +125,7 @@ public class blockHolder {
 		{
 			for (int j = 1; j <12; j++)
 			{
-				if(j==12)
-				{
-					
-					break;
-				}
+				
 				switchBlocks(j, i, j-1, i);
 			}
 		}

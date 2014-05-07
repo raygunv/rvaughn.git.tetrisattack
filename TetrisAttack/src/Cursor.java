@@ -5,6 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.Timer;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -17,7 +18,8 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 	int xCur=ROWS/2;
 	int yCur=COLUMNS/2-1;
 		
-	
+	Timer timer;
+	int tspeed=5000;
 	public Cursor(Game mg){
 //		holder=bh;
 		myGame = mg;
@@ -26,13 +28,29 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 		setBorder(new LineBorder(new Color(0, 0, 0), 3));
 		setSize(133, 68);
 		myGame.drawCursor(this);
+		timer=new Timer(tspeed, this);
+		timer.start();
 	}
+	
+	public void stop()
+	{
+		timer.stop();
+		this.setEnabled(false); // disable keylistener
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
+		myGame.addRow();
+		timer.stop();
+		if(xCur>0)
+		{
+			xCur--;
+		}
+		myGame.drawCursor(this);
+		timer.start();
 		
 	}
-
 	@Override
 	public void keyPressed(KeyEvent k) {
 		// TODO Auto-generated method stub
@@ -71,6 +89,10 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 		if(k.getKeyChar()=='p')
 		{
 			myGame.addRow();
+			if(xCur>0)
+			{
+				xCur--;
+			}
 		}
 		
 		setLocation(yCur*60 + yCur*5+1, xCur*60 + xCur*5+1);
