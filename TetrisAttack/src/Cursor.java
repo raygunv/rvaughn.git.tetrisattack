@@ -19,7 +19,7 @@ public  class Cursor extends JPanel implements ActionListener, KeyListener {
 	int yCur=COLUMNS/2-1;
 		
 	Timer timer;
-	int tspeed=5000;
+	int tspeed=10000;
 	public Cursor(Game mg){
 //		holder=bh;
 		myGame = mg;
